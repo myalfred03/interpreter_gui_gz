@@ -88,19 +88,19 @@ MainWindow::MainWindow(QWidget *parent) :
 //   boost::thread* publisher_thread_;
    isloop=false;
    limit.data.resize(12);
-   limit.data[0] = -3.22885911619 *ToG;
-   limit.data[1] = -2.70526034059 *ToG;
-   limit.data[2] = -2.26892802759 *ToG;
-   limit.data[3] = -6.10865238198 *ToG;
-   limit.data[4] = -2.26892802759 *ToG;
-   limit.data[5] = -6.10865238198 *ToG;
+   limit.data[0] = -3.22886 *ToG;
+   limit.data[1] = -2.70526 *ToG;
+   limit.data[2] = -2.26893 *ToG;
+   limit.data[3] = -6.10865 *ToG;
+   limit.data[4] = -2.26893 *ToG;
+   limit.data[5] = -6.10865 *ToG;
 
-   limit.data[6] = 3.22885911619 *ToG;
-   limit.data[7] = 2.72271363311 *ToG;
-   limit.data[8] = 2.68780704807 *ToG;
-   limit.data[9] = 6.10865238198 *ToG;
-   limit.data[10] = 2.26892802759 *ToG;
-   limit.data[11] = 6.10865238198 *ToG;
+   limit.data[6] = 3.22886 *ToG;
+   limit.data[7] = 0.610865 *ToG;
+   limit.data[8] = 2.68781  *ToG;
+   limit.data[9] = 6.10865  *ToG;
+   limit.data[10] = 2.26893 *ToG;
+   limit.data[11] = 6.10865 *ToG;
    publisher_thread_ = new boost::thread(boost::bind(&MainWindow::runloop, this));
 
 
