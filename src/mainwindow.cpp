@@ -78,7 +78,7 @@ MainWindow::MainWindow(QWidget *parent) :
   msgolder.points.resize(1);
   msgolder.points[0].positions.resize(6);
 
-   joint_pub =       nh_.advertise<trajectory_msgs::JointTrajectory>("set_joint_trajectory", 10);
+   joint_pub =       nh_.advertise<trajectory_msgs::JointTrajectory>("set_joint_trajectory", 1);
 //   joint_sub_limit = nh_.subscribe("/joint_limits",10,&MainWindow::jointsizeCallback, this);
    pid_value_pub   = nh_.advertise<trajectory_msgs::JointTrajectory>("pid_value", 10);
    joint_sub_gazebo= nh_.subscribe("/gazebo_client/joint_values_gazebo",10,&MainWindow::joint_Gz_Callback, this);
@@ -530,12 +530,12 @@ void MainWindow::joint_Gz_Callback(const trajectory_msgs::JointTrajectory &msg) 
 {
   std::cout<<"gazebo joints"<< std::endl;
 
-    joint_1_plot = msg.points[0].positions[0]*ToG;
-    joint_2_plot = msg.points[0].positions[1]*ToG;
-    joint_3_plot = msg.points[0].positions[2]*ToG;
-    joint_4_plot = msg.points[0].positions[3]*ToG;
-    joint_5_plot = msg.points[0].positions[4]*ToG;
-    joint_6_plot = msg.points[0].positions[5]*ToG;
+    joint_1_plot = msg.points[0].positions[1];
+    joint_2_plot = msg.points[0].positions[2]*ToG;
+    joint_3_plot = msg.points[0].positions[3]*ToG;
+    joint_4_plot = msg.points[0].positions[4]*ToG;
+    joint_5_plot = msg.points[0].positions[5]*ToG;
+    joint_6_plot = msg.points[0].positions[6]*ToG;
   std::cout<<joint_1_plot<<"\n"<<joint_2_plot<<std::endl;
 
      // joint_positions_["joint_1"]= msg.points[0].positions[0]/ToG;
