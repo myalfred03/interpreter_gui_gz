@@ -63,9 +63,27 @@ MainWindow::MainWindow(QWidget *parent) :
     joint_5_plot = 0.0;
     joint_6_plot = 0.0;
 
+    vel_1_plot = 0.0;
+    vel_2_plot = 0.0;
+    vel_3_plot = 0.0;
+    vel_4_plot = 0.0;
+    vel_5_plot = 0.0;
+    vel_6_plot = 0.0;
+
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(updateGraph()));
     timer->start(5);
+
+
+  ui->graph_canvas->yAxis->setTickLabels(false);
+  connect(ui->graph_canvas->yAxis2, SIGNAL(rangeChanged(QCPRange)), ui->graph_canvas->yAxis, SLOT(setRange(QCPRange))); // left axis only mirrors inner right axis
+  ui->graph_canvas->yAxis2->setVisible(true);
+  ui->graph_canvas->axisRect()->addAxis(QCPAxis::atRight);
+  ui->graph_canvas->axisRect()->axis(QCPAxis::atRight, 0)->setPadding(30); // add some padding to have space for tags
+  ui->graph_canvas->axisRect()->axis(QCPAxis::atRight, 1)->setPadding(30); // add some padding to have space for tags
+
+ 
+
 
     this->initializeGraph();
     connect(ui->graph_canvas, SIGNAL(mouseMove(QMouseEvent*)), this, SLOT(mouseMoved(QMouseEvent*)));
@@ -79,7 +97,7 @@ MainWindow::MainWindow(QWidget *parent) :
   msgolder.points[0].positions.resize(6);
 
    joint_pub =       nh_.advertise<trajectory_msgs::JointTrajectory>("set_joint_trajectory", 1);
-//   joint_sub_limit = nh_.subscribe("/joint_limits",10,&MainWindow::jointsizeCallback, this);
+// joint_sub_limit = nh_.subscribe("/joint_limits",10,&MainWindow::jointsizeCallback, this);
    pid_value_pub   = nh_.advertise<trajectory_msgs::JointTrajectory>("pid_value", 10);
    joint_sub_gazebo= nh_.subscribe("/gazebo_client/joint_values_gazebo",10,&MainWindow::joint_Gz_Callback, this);
 
@@ -126,29 +144,43 @@ void MainWindow::initializeGraph() {
     //ui.graph_canvas->axisRect()->insetLayout()->setInsetAlignment(0, Qt::AlignRight|Qt::AlignBottom);
 
     //Add the graphs
-    ui->graph_canvas->addGraph();
-    ui->graph_canvas->graph(0)->setName("Joint_1");
-    QPen blueDotPen;
-    blueDotPen.setColor(QColor(30, 40, 255, 150));
-    blueDotPen.setStyle(Qt::DotLine);
-    blueDotPen.setWidthF(4);
-    ui->graph_canvas->graph(0)->setPen(blueDotPen);
 
-    ui->graph_canvas->addGraph();
-    ui->graph_canvas->graph(1)->setName("Joint_2");
-    QPen redDotPen;
-    redDotPen.setColor(Qt::red);
-    redDotPen.setStyle(Qt::DotLine);
-    redDotPen.setWidthF(4);
-    ui->graph_canvas->graph(1)->setPen(redDotPen);
+   mGraph1 = ui->graph_canvas->addGraph(ui->graph_canvas->xAxis, ui->graph_canvas->axisRect()->axis(QCPAxis::atRight, 0));
+   mGraph11 = ui->graph_canvas->addGraph(ui->graph_canvas->xAxis, ui->graph_canvas->axisRect()->axis(QCPAxis::atRight, 0));
+   mGraph2 = ui->graph_canvas->addGraph(ui->graph_canvas->xAxis, ui->graph_canvas->axisRect()->axis(QCPAxis::atRight, 1));
+   mGraph1->setPen(QPen(QColor(250, 120, 0)));
+   mGraph11->setPen(QPen(QColor(0, 120, 0)));
+   mGraph2->setPen(QPen(QColor(0, 180, 60)));
+   mTag1 = new AxisTag(mGraph1->valueAxis());
+   mTag1->setPen(mGraph1->pen());
+   mTag11 = new AxisTag(mGraph11->valueAxis());
+   mTag11->setPen(mGraph11->pen());
+   mTag2 = new AxisTag(mGraph2->valueAxis());
+   mTag2->setPen(mGraph2->pen());
 
-    ui->graph_canvas->addGraph();
-    ui->graph_canvas->graph(2)->setName("Joint_3");
-    QPen yellowDotPen;
-    yellowDotPen.setColor(Qt::yellow);
-    yellowDotPen.setStyle(Qt::DotLine);
-    yellowDotPen.setWidthF(4);
-    ui->graph_canvas->graph(2)->setPen(yellowDotPen);
+   // mGraph1 = ui->graph_canvas->addGraph();
+    //mGraph1 =ui->graph_canvas->graph(0)->setName("Joint_1");
+    // QPen blueDotPen;
+    // blueDotPen.setColor(QColor(30, 40, 255, 150));
+    // blueDotPen.setStyle(Qt::DotLine);
+    // blueDotPen.setWidthF(4);
+    // mGraph1 =ui->graph_canvas->graph(0)->setPen(blueDotPen);
+
+    // mGraph2 = ui->graph_canvas->addGraph();
+    // mGraph2 = ui->graph_canvas->graph(1)->setName("Joint_2");
+    // QPen redDotPen;
+    // redDotPen.setColor(Qt::red);
+    // redDotPen.setStyle(Qt::DotLine);
+    // redDotPen.setWidthF(4);
+    // mGraph2 = ui->graph_canvas->graph(1)->setPen(redDotPen);
+
+    // ui->graph_canvas->addGraph();
+    // ui->graph_canvas->graph(2)->setName("Joint_3");
+    // QPen yellowDotPen;
+    // yellowDotPen.setColor(Qt::yellow);
+    // yellowDotPen.setStyle(Qt::DotLine);
+    // yellowDotPen.setWidthF(4);
+    // ui->graph_canvas->graph(2)->setPen(yellowDotPen);
 
     ui->graph_canvas->addGraph();
     ui->graph_canvas->graph(3)->setName("Joint_4");
@@ -208,8 +240,8 @@ void MainWindow::mouseMoved(QMouseEvent *event) {
 void MainWindow::removeAllGraphs()
 {
    // main_window_ui_->graph_canvas->clearGraphs();
-   ui->graph_canvas->graph(0)->data()->clear();
-   ui->graph_canvas->graph(1)->data()->clear();
+    ui->graph_canvas->graph(0)->data()->clear();
+    ui->graph_canvas->graph(1)->data()->clear();
    ui->graph_canvas->graph(2)->data()->clear();
    ui->graph_canvas->graph(3)->data()->clear();
    ui->graph_canvas->graph(4)->data()->clear();
@@ -230,11 +262,32 @@ void MainWindow::updateGraph() {
 
     ui->graph_canvas->graph(0)->addData(x_val, joint_1_plot);//Set Point
     ui->graph_canvas->graph(1)->addData(x_val, joint_2_plot);//Output
-    ui->graph_canvas->graph(2)->addData(x_val, joint_3_plot);
+    ui->graph_canvas->graph(2)->addData(x_val, vel_1_plot);
     ui->graph_canvas->graph(3)->addData(x_val, joint_4_plot);
     ui->graph_canvas->graph(4)->addData(x_val, joint_5_plot);
     ui->graph_canvas->graph(5)->addData(x_val, joint_6_plot);
-    ui->graph_canvas->rescaleAxes();
+  
+
+ // ui->graph_canvas->xAxis->rescale();
+  mGraph1->rescaleValueAxis(false, true);
+  mGraph11->rescaleValueAxis(false, true);
+  mGraph2->rescaleValueAxis(false, true);
+  ui->graph_canvas->xAxis->setRange(ui->graph_canvas->xAxis->range().upper, 30, Qt::AlignRight);
+  
+  // update the vertical axis tag positions and texts to match the rightmost data point of the graphs:
+  double graph1Value = mGraph1->dataMainValue(mGraph1->dataCount()-1);
+  double graph11Value = mGraph11->dataMainValue(mGraph11->dataCount()-1);
+  double graph2Value = mGraph2->dataMainValue(mGraph2->dataCount()-1);
+  mTag1->updatePosition(graph1Value);
+  mTag11->updatePosition(graph11Value);
+  mTag2->updatePosition(graph2Value);
+  mTag1->setText(QString::number(graph1Value, 'f', 2));
+  mTag11->setText(QString::number(graph11Value, 'f', 2));
+  mTag2->setText(QString::number(graph2Value, 'f', 2));
+  
+ // mPlot->replot();
+  ui->graph_canvas->rescaleAxes();
+
     ui->graph_canvas->replot();
 }
 
@@ -268,8 +321,9 @@ void MainWindow::on_comboBox_currentIndexChanged(int index=0)
    case 1:
   {
     ui->graph_canvas->graph(0)->setVisible(true);
+    //mGraph11->setVisible(false);
     ui->graph_canvas->graph(1)->setVisible(false);
-    ui->graph_canvas->graph(2)->setVisible(false);
+    ui->graph_canvas->graph(2)->setVisible(true);
     ui->graph_canvas->graph(3)->setVisible(false);
     ui->graph_canvas->graph(4)->setVisible(false);
     ui->graph_canvas->graph(5)->setVisible(false);
@@ -279,6 +333,7 @@ void MainWindow::on_comboBox_currentIndexChanged(int index=0)
    case 2:
  {
     ui->graph_canvas->graph(0)->setVisible(false);
+    //mGraph1->setVisible(false);
     ui->graph_canvas->graph(1)->setVisible(true);
     ui->graph_canvas->graph(2)->setVisible(false);
     ui->graph_canvas->graph(3)->setVisible(false);
@@ -530,12 +585,20 @@ void MainWindow::joint_Gz_Callback(const trajectory_msgs::JointTrajectory &msg) 
 {
   std::cout<<"gazebo joints"<< std::endl;
 
-    joint_1_plot = msg.points[0].positions[1];
+    joint_1_plot = msg.points[0].positions[1]*ToG;
     joint_2_plot = msg.points[0].positions[2]*ToG;
     joint_3_plot = msg.points[0].positions[3]*ToG;
     joint_4_plot = msg.points[0].positions[4]*ToG;
     joint_5_plot = msg.points[0].positions[5]*ToG;
     joint_6_plot = msg.points[0].positions[6]*ToG;
+
+    vel_1_plot = msg.points[1].positions[1];
+    vel_2_plot = msg.points[1].positions[2];
+    vel_3_plot = msg.points[1].positions[3]*ToG;
+    vel_4_plot = msg.points[1].positions[4]*ToG;
+    vel_5_plot = msg.points[1].positions[5]*ToG;
+    vel_6_plot = msg.points[1].positions[6]*ToG;
+
   std::cout<<joint_1_plot<<"\n"<<joint_2_plot<<std::endl;
 
      // joint_positions_["joint_1"]= msg.points[0].positions[0]/ToG;

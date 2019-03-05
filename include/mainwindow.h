@@ -18,6 +18,8 @@
 #include <std_msgs/Float32MultiArray.h>
 #include <boost/bind.hpp>
 #include <std_msgs/String.h>
+#include "axistag.h"
+
 //#include <moveit/robot_trajectory/robot_trajectory.h>
 
 namespace Ui {
@@ -44,6 +46,8 @@ public:
   double x_org;
   ros::Time startTime;
   double joint_1_plot, joint_2_plot, joint_3_plot, joint_4_plot, joint_5_plot, joint_6_plot;
+  double vel_1_plot, vel_2_plot, vel_3_plot, vel_4_plot, vel_5_plot, vel_6_plot;
+
   QTimer *timer;
 
 
@@ -58,7 +62,12 @@ private:
   QIcon RerrorIcon;
   Ui::MainWindow *ui;
   Highlighter *highlighter;
-
+  AxisTag *mTag1;
+  AxisTag *mTag11;
+  AxisTag *mTag2;
+  QPointer<QCPGraph> mGraph1;
+  QPointer<QCPGraph> mGraph11;
+  QPointer<QCPGraph> mGraph2;
 
 
 //  QProcess process;

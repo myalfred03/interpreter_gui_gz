@@ -72,6 +72,7 @@ set (MyProject_src
           src/highlighter.cpp
           src/mainwindow.cpp
 	  src/qcustomplot.cpp
+	  src/axistag.cpp
     )
 
 set (MyProjectLib_ui
@@ -87,6 +88,7 @@ set (MyProjectLib_hdr
             include/mainwindow.h
             include/ui_mainwindow.h
 	    include/qcustomplot.h
+	    include/axistag.h
 
     )
 
