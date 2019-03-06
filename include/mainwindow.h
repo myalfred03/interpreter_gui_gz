@@ -62,13 +62,10 @@ private:
   QIcon RerrorIcon;
   Ui::MainWindow *ui;
   Highlighter *highlighter;
-  AxisTag *mTag1;
-  AxisTag *mTag11;
-  AxisTag *mTag2;
-  QPointer<QCPGraph> mGraph1;
-  QPointer<QCPGraph> mGraph11;
-  QPointer<QCPGraph> mGraph2;
-
+  AxisTag *jTag0, *jTag1, *jTag2, *jTag3, *jTag4, *jTag5;
+  AxisTag *vTag0, *vTag1, *vTag2, *vTag3, *vTag4, *vTag5;
+  QPointer<QCPGraph> jGraph0, jGraph1, jGraph2, jGraph3, jGraph4, jGraph5;
+  QPointer<QCPGraph> vGraph0, vGraph1, vGraph2, vGraph3, vGraph4, vGraph5;
 
 //  QProcess process;
   void setUpHighlighter();

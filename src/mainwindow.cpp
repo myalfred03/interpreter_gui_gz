@@ -145,18 +145,82 @@ void MainWindow::initializeGraph() {
 
     //Add the graphs
 
-   mGraph1 = ui->graph_canvas->addGraph(ui->graph_canvas->xAxis, ui->graph_canvas->axisRect()->axis(QCPAxis::atRight, 0));
-   mGraph11 = ui->graph_canvas->addGraph(ui->graph_canvas->xAxis, ui->graph_canvas->axisRect()->axis(QCPAxis::atRight, 0));
-   mGraph2 = ui->graph_canvas->addGraph(ui->graph_canvas->xAxis, ui->graph_canvas->axisRect()->axis(QCPAxis::atRight, 1));
-   mGraph1->setPen(QPen(QColor(250, 120, 0)));
-   mGraph11->setPen(QPen(QColor(0, 120, 0)));
-   mGraph2->setPen(QPen(QColor(0, 180, 60)));
-   mTag1 = new AxisTag(mGraph1->valueAxis());
-   mTag1->setPen(mGraph1->pen());
-   mTag11 = new AxisTag(mGraph11->valueAxis());
-   mTag11->setPen(mGraph11->pen());
-   mTag2 = new AxisTag(mGraph2->valueAxis());
-   mTag2->setPen(mGraph2->pen());
+   jGraph0 = ui->graph_canvas->addGraph(ui->graph_canvas->xAxis, ui->graph_canvas->axisRect()->axis(QCPAxis::atRight, 0));
+   jGraph1 = ui->graph_canvas->addGraph(ui->graph_canvas->xAxis, ui->graph_canvas->axisRect()->axis(QCPAxis::atRight, 0));
+   jGraph2 = ui->graph_canvas->addGraph(ui->graph_canvas->xAxis, ui->graph_canvas->axisRect()->axis(QCPAxis::atRight, 0));
+   jGraph3 = ui->graph_canvas->addGraph(ui->graph_canvas->xAxis, ui->graph_canvas->axisRect()->axis(QCPAxis::atRight, 0));
+   jGraph4 = ui->graph_canvas->addGraph(ui->graph_canvas->xAxis, ui->graph_canvas->axisRect()->axis(QCPAxis::atRight, 0));
+   jGraph5 = ui->graph_canvas->addGraph(ui->graph_canvas->xAxis, ui->graph_canvas->axisRect()->axis(QCPAxis::atRight, 0));
+
+   vGraph0 = ui->graph_canvas->addGraph(ui->graph_canvas->xAxis, ui->graph_canvas->axisRect()->axis(QCPAxis::atRight, 1));
+   vGraph1 = ui->graph_canvas->addGraph(ui->graph_canvas->xAxis, ui->graph_canvas->axisRect()->axis(QCPAxis::atRight, 1));
+   vGraph2 = ui->graph_canvas->addGraph(ui->graph_canvas->xAxis, ui->graph_canvas->axisRect()->axis(QCPAxis::atRight, 1));
+   vGraph3 = ui->graph_canvas->addGraph(ui->graph_canvas->xAxis, ui->graph_canvas->axisRect()->axis(QCPAxis::atRight, 1));
+   vGraph4 = ui->graph_canvas->addGraph(ui->graph_canvas->xAxis, ui->graph_canvas->axisRect()->axis(QCPAxis::atRight, 1));
+   vGraph5 = ui->graph_canvas->addGraph(ui->graph_canvas->xAxis, ui->graph_canvas->axisRect()->axis(QCPAxis::atRight, 1));
+
+   QPen PenJ1;
+   PenJ1.setColor(QColor(30, 40, 255, 150));
+   PenJ1.setStyle(Qt::DotLine);
+   PenJ1.setWidthF(2);
+   jGraph0->setPen(PenJ1);
+   jGraph0->setName("Joint_1");
+   jTag0 = new AxisTag(jGraph0->valueAxis());
+   jTag0->setPen(jGraph0->pen());
+
+   QPen PenJ2;
+   PenJ2.setColor(Qt::red);
+   PenJ2.setStyle(Qt::DotLine);
+   PenJ2.setWidthF(2);
+   jGraph1->setPen(PenJ2);
+   jGraph1->setName("Joint_2");
+   jTag1 = new AxisTag(jGraph1->valueAxis());
+   jTag1->setPen(jGraph1->pen());
+
+   QPen PenJ3;
+   PenJ3.setColor(Qt::yellow);
+   PenJ3.setStyle(Qt::DotLine);
+   PenJ3.setWidthF(2);
+   jGraph2->setPen(PenJ3);
+   jGraph2->setName("Joint_3");
+   jTag2 = new AxisTag(jGraph2->valueAxis());
+   jTag2->setPen(jGraph2->pen());
+
+   QPen PenJ4;
+   PenJ4.setColor(QColor(115,182,209));
+   PenJ4.setStyle(Qt::DotLine);
+   PenJ4.setWidthF(2);
+   jGraph3->setPen(PenJ4);
+   jGraph3->setName("Joint_4");
+   jTag3 = new AxisTag(jGraph3->valueAxis());
+   jTag3->setPen(jGraph3->pen());
+
+   QPen PenJ5;
+   PenJ5.setColor(Qt::black);
+   PenJ5.setStyle(Qt::DotLine);
+   PenJ5.setWidthF(2);
+   jGraph4->setPen(PenJ5);
+   jGraph4->setName("Joint_5");
+   jTag4 = new AxisTag(jGraph4->valueAxis());
+   jTag4->setPen(jGraph4->pen());
+
+   QPen PenJ6;
+   PenJ6.setColor(Qt::green);
+   PenJ6.setStyle(Qt::DotLine);
+   PenJ6.setWidthF(2);
+   jGraph5->setPen(PenJ6);
+   jGraph5->setName("Joint_6");
+   jTag5 = new AxisTag(jGraph5->valueAxis());
+   jTag5->setPen(jGraph5->pen());
+
+   // mGraph11->setPen(QPen(QColor(0, 120, 0)));
+   // mGraph2->setPen(QPen(QColor(0, 180, 60)));
+   // mTag1 = new AxisTag(mGraph1->valueAxis());
+   // mTag1->setPen(mGraph1->pen());
+   // mTag11 = new AxisTag(mGraph11->valueAxis());
+   // mTag11->setPen(mGraph11->pen());
+   // mTag2 = new AxisTag(mGraph2->valueAxis());
+   // mTag2->setPen(mGraph2->pen());
 
    // mGraph1 = ui->graph_canvas->addGraph();
     //mGraph1 =ui->graph_canvas->graph(0)->setName("Joint_1");
@@ -182,33 +246,33 @@ void MainWindow::initializeGraph() {
     // yellowDotPen.setWidthF(4);
     // ui->graph_canvas->graph(2)->setPen(yellowDotPen);
 
-    ui->graph_canvas->addGraph();
-    ui->graph_canvas->graph(3)->setName("Joint_4");
-    QPen blackDotPen;
-    blackDotPen.setColor(Qt::black);
-    blackDotPen.setStyle(Qt::DotLine);
-    blackDotPen.setWidthF(4);
-    ui->graph_canvas->graph(3)->setPen(blackDotPen);
+    // ui->graph_canvas->addGraph();
+    // ui->graph_canvas->graph(3)->setName("Joint_4");
+    // QPen blackDotPen;
+    // blackDotPen.setColor(Qt::black);
+    // blackDotPen.setStyle(Qt::DotLine);
+    // blackDotPen.setWidthF(4);
+    // ui->graph_canvas->graph(3)->setPen(blackDotPen);
 
-    ui->graph_canvas->addGraph();
-    ui->graph_canvas->graph(4)->setName("Joint_5");
-    QPen greenDotPen;
-    greenDotPen.setColor(Qt::green);
-    greenDotPen.setStyle(Qt::DotLine);
-    greenDotPen.setWidthF(4);
-    ui->graph_canvas->graph(4)->setPen(greenDotPen);
+    // ui->graph_canvas->addGraph();
+    // ui->graph_canvas->graph(4)->setName("Joint_5");
+    // QPen greenDotPen;
+    // greenDotPen.setColor(Qt::green);
+    // greenDotPen.setStyle(Qt::DotLine);
+    // greenDotPen.setWidthF(4);
+    // ui->graph_canvas->graph(4)->setPen(greenDotPen);
 
-    ui->graph_canvas->addGraph();
-    ui->graph_canvas->graph(5)->setName("Joint_6");
-    QPen otherDotPen;
-    otherDotPen.setColor(QColor(115,182,209));
-    otherDotPen.setStyle(Qt::DotLine);
-    otherDotPen.setWidthF(4);
-    ui->graph_canvas->graph(5)->setPen(otherDotPen);
+    // ui->graph_canvas->addGraph();
+    // ui->graph_canvas->graph(5)->setName("Joint_6");
+    // QPen otherDotPen;
+    // otherDotPen.setColor(QColor(115,182,209));
+    // otherDotPen.setStyle(Qt::DotLine);
+    // otherDotPen.setWidthF(4);
+    // ui->graph_canvas->graph(5)->setPen(otherDotPen);
 
     // give the axes some labels:
     ui->graph_canvas->xAxis->setLabel("Time (s)");
-    ui->graph_canvas->yAxis->setLabel("Joint move (°)");
+    ui->graph_canvas->yAxis->setLabel("Joint move (°/rad)");
     ui->graph_canvas->legend->setVisible(true);
 
 
@@ -269,24 +333,36 @@ void MainWindow::updateGraph() {
   
 
  // ui->graph_canvas->xAxis->rescale();
-  mGraph1->rescaleValueAxis(false, true);
-  mGraph11->rescaleValueAxis(false, true);
-  mGraph2->rescaleValueAxis(false, true);
+  jGraph0->rescaleValueAxis(false, true);
+  jGraph1->rescaleValueAxis(false, true);
+  jGraph2->rescaleValueAxis(false, true);
+  jGraph3->rescaleValueAxis(false, true);
+  jGraph4->rescaleValueAxis(false, true);
+  jGraph5->rescaleValueAxis(false, true);
   ui->graph_canvas->xAxis->setRange(ui->graph_canvas->xAxis->range().upper, 30, Qt::AlignRight);
   
   // update the vertical axis tag positions and texts to match the rightmost data point of the graphs:
-  double graph1Value = mGraph1->dataMainValue(mGraph1->dataCount()-1);
-  double graph11Value = mGraph11->dataMainValue(mGraph11->dataCount()-1);
-  double graph2Value = mGraph2->dataMainValue(mGraph2->dataCount()-1);
-  mTag1->updatePosition(graph1Value);
-  mTag11->updatePosition(graph11Value);
-  mTag2->updatePosition(graph2Value);
-  mTag1->setText(QString::number(graph1Value, 'f', 2));
-  mTag11->setText(QString::number(graph11Value, 'f', 2));
-  mTag2->setText(QString::number(graph2Value, 'f', 2));
+  double jgraph1Value = jGraph0->dataMainValue(jGraph0->dataCount()-1);
+  double jgraph2Value = jGraph1->dataMainValue(jGraph1->dataCount()-1);
+  double jgraph3Value = jGraph2->dataMainValue(jGraph2->dataCount()-1);
+  double jgraph4Value = jGraph3->dataMainValue(jGraph3->dataCount()-1);
+  double jgraph5Value = jGraph4->dataMainValue(jGraph4->dataCount()-1);
+  double jgraph6Value = jGraph5->dataMainValue(jGraph5->dataCount()-1);
+  jTag0->updatePosition(jgraph1Value);
+  jTag1->updatePosition(jgraph2Value);
+  jTag2->updatePosition(jgraph3Value);
+  jTag3->updatePosition(jgraph4Value);
+  jTag4->updatePosition(jgraph5Value);
+  jTag5->updatePosition(jgraph6Value);
+  jTag0->setText(QString::number(jgraph1Value, 'f', 2));
+  jTag1->setText(QString::number(jgraph2Value, 'f', 2));
+  jTag2->setText(QString::number(jgraph3Value, 'f', 2));
+  jTag3->setText(QString::number(jgraph4Value, 'f', 2));
+  jTag4->setText(QString::number(jgraph5Value, 'f', 2));
+  jTag5->setText(QString::number(jgraph6Value, 'f', 2));
   
  // mPlot->replot();
-  ui->graph_canvas->rescaleAxes();
+   ui->graph_canvas->rescaleAxes();
 
     ui->graph_canvas->replot();
 }
