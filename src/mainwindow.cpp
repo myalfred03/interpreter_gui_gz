@@ -88,7 +88,12 @@ MainWindow::MainWindow(QWidget *parent) :
     this->initializeGraph();
     connect(ui->graph_canvas, SIGNAL(mouseMove(QMouseEvent*)), this, SLOT(mouseMoved(QMouseEvent*)));
     connect(ui->graph_canvas, SIGNAL(mouseWheel(QWheelEvent*)), this, SLOT(mouseWheel()));
+    connect(ui->graph_canvas, SIGNAL(mousePress(QMouseEvent*)), this, SLOT(mousePress()));
+
     connect(ui->pushButton_2, SIGNAL(clicked()), this, SLOT(removeAllGraphs()));
+
+    ui->graph_canvas->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(ui->graph_canvas,  SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextMenuRequest(QPoint)));
 
     connect(ui->comboBox,      SIGNAL(currentIndexChanged(int)), this, SLOT(on_comboBox_currentIndexChanged(int)));
 
@@ -213,6 +218,62 @@ void MainWindow::initializeGraph() {
    jTag5 = new AxisTag(jGraph5->valueAxis());
    jTag5->setPen(jGraph5->pen());
 
+   //Velocity
+
+   QPen Penv1;
+   Penv1.setColor(Qt::black);
+   Penv1.setStyle(Qt::DotLine);
+   Penv1.setWidthF(2);
+   vGraph0->setPen(Penv1);
+   vGraph0->setName("v_Joint_1");
+   vTag0 = new AxisTag(vGraph0->valueAxis());
+   vTag0->setPen(vGraph0->pen());
+
+   QPen Penv2;
+   Penv2.setColor(Qt::yellow);
+   Penv2.setStyle(Qt::DotLine);
+   Penv2.setWidthF(2);
+   vGraph1->setPen(Penv2);
+   vGraph1->setName("v_Joint_2");
+   vTag1 = new AxisTag(vGraph1->valueAxis());
+   vTag1->setPen(vGraph1->pen());
+
+   QPen Penv3;
+   Penv3.setColor(QColor(115,182,209));
+   Penv3.setStyle(Qt::DotLine);
+   Penv3.setWidthF(2);
+   vGraph2->setPen(Penv3);
+   vGraph2->setName("v_Joint_3");
+   vTag2 = new AxisTag(vGraph2->valueAxis());
+   vTag2->setPen(vGraph2->pen());
+
+   QPen Penv4;
+   Penv4.setColor(Qt::green);
+   Penv4.setStyle(Qt::DotLine);
+   Penv4.setWidthF(2);
+   vGraph3->setPen(Penv4);
+   vGraph3->setName("v_Joint_4");
+   vTag3 = new AxisTag(vGraph3->valueAxis());
+   vTag3->setPen(vGraph3->pen());
+
+   QPen Penv5;
+   Penv5.setColor(QColor(30, 40, 255, 150));
+   Penv5.setStyle(Qt::DotLine);
+   Penv5.setWidthF(2);
+   vGraph4->setPen(Penv5);
+   vGraph4->setName("v_Joint_5");
+   vTag4 = new AxisTag(vGraph4->valueAxis());
+   vTag4->setPen(vGraph4->pen());
+
+   QPen Penv6;
+   Penv6.setColor(Qt::red);
+   Penv6.setStyle(Qt::DotLine);
+   Penv6.setWidthF(2);
+   vGraph5->setPen(Penv6);
+   vGraph5->setName("v_Joint_6");
+   vTag5 = new AxisTag(vGraph5->valueAxis());
+   vTag5->setPen(vGraph5->pen());
+
    // mGraph11->setPen(QPen(QColor(0, 120, 0)));
    // mGraph2->setPen(QPen(QColor(0, 180, 60)));
    // mTag1 = new AxisTag(mGraph1->valueAxis());
@@ -272,8 +333,13 @@ void MainWindow::initializeGraph() {
 
     // give the axes some labels:
     ui->graph_canvas->xAxis->setLabel("Time (s)");
-    ui->graph_canvas->yAxis->setLabel("Joint move (°/rad)");
+    ui->graph_canvas->yAxis->setLabel("Joint move (°) | (°/s)");
     ui->graph_canvas->legend->setVisible(true);
+    QFont legendFont = font();
+    legendFont.setPointSize(10);
+    ui->graph_canvas->legend->setFont(legendFont);
+    ui->graph_canvas->legend->setSelectedFont(legendFont);
+    ui->graph_canvas->legend->setSelectableParts(QCPLegend::spItems); // legend box shall not be selectable, only legend items
 
 
     //For user interaction
@@ -301,15 +367,59 @@ void MainWindow::mouseMoved(QMouseEvent *event) {
     ui->label_4->setText(QString::fromStdString(oss.str()));
 }
 
+void MainWindow::contextMenuRequest(QPoint pos)
+{
+  QMenu *menu = new QMenu(this);
+  menu->setAttribute(Qt::WA_DeleteOnClose);
+  
+  if (ui->graph_canvas->legend->selectTest(pos, false) >= 0) // context menu on legend requested
+  {
+    menu->addAction("Move to top left", this, SLOT(moveLegend()))->setData((int)(Qt::AlignTop|Qt::AlignLeft));
+    menu->addAction("Move to top center", this, SLOT(moveLegend()))->setData((int)(Qt::AlignTop|Qt::AlignHCenter));
+    menu->addAction("Move to top right", this, SLOT(moveLegend()))->setData((int)(Qt::AlignTop|Qt::AlignRight));
+    menu->addAction("Move to bottom right", this, SLOT(moveLegend()))->setData((int)(Qt::AlignBottom|Qt::AlignRight));
+    menu->addAction("Move to bottom left", this, SLOT(moveLegend()))->setData((int)(Qt::AlignBottom|Qt::AlignLeft));
+  } else  // general context menu on graphs requested
+  {
+
+    if (ui->graph_canvas->graphCount() > 0)
+      menu->addAction("Clear all graphs", this, SLOT(removeAllGraphs()));
+    //END
+    std::cout <<"esta fue la ultima linea de code bajo ROS, Yeser A. Morales" << std::endl;
+  }
+  
+  menu->popup(ui->graph_canvas->mapToGlobal(pos));
+}
+
+void MainWindow::moveLegend()
+{
+  if (QAction* contextAction = qobject_cast<QAction*>(sender())) // make sure this slot is really called by a context menu action, so it carries the data we need
+  {
+    bool ok;
+    int dataInt = contextAction->data().toInt(&ok);
+    if (ok)
+    {
+      ui->graph_canvas->axisRect()->insetLayout()->setInsetAlignment(0, (Qt::Alignment)dataInt);
+      ui->graph_canvas->replot();
+    }
+  }
+}
+
 void MainWindow::removeAllGraphs()
 {
    // main_window_ui_->graph_canvas->clearGraphs();
-    ui->graph_canvas->graph(0)->data()->clear();
-    ui->graph_canvas->graph(1)->data()->clear();
+   ui->graph_canvas->graph(0)->data()->clear();
+   ui->graph_canvas->graph(1)->data()->clear();
    ui->graph_canvas->graph(2)->data()->clear();
    ui->graph_canvas->graph(3)->data()->clear();
    ui->graph_canvas->graph(4)->data()->clear();
    ui->graph_canvas->graph(5)->data()->clear();
+   ui->graph_canvas->graph(6)->data()->clear();
+   ui->graph_canvas->graph(7)->data()->clear();
+   ui->graph_canvas->graph(8)->data()->clear();
+   ui->graph_canvas->graph(9)->data()->clear();
+   ui->graph_canvas->graph(10)->data()->clear();
+   ui->graph_canvas->graph(11)->data()->clear();
 
    ui->graph_canvas->replot();
 }
@@ -326,10 +436,17 @@ void MainWindow::updateGraph() {
 
     ui->graph_canvas->graph(0)->addData(x_val, joint_1_plot);//Set Point
     ui->graph_canvas->graph(1)->addData(x_val, joint_2_plot);//Output
-    ui->graph_canvas->graph(2)->addData(x_val, vel_1_plot);
+    ui->graph_canvas->graph(2)->addData(x_val, joint_3_plot);
     ui->graph_canvas->graph(3)->addData(x_val, joint_4_plot);
     ui->graph_canvas->graph(4)->addData(x_val, joint_5_plot);
     ui->graph_canvas->graph(5)->addData(x_val, joint_6_plot);
+
+    ui->graph_canvas->graph(6)->addData(x_val, vel_1_plot);//Set Point
+    ui->graph_canvas->graph(7)->addData(x_val, vel_2_plot);//Output
+    ui->graph_canvas->graph(8)->addData(x_val, vel_3_plot);
+    ui->graph_canvas->graph(9)->addData(x_val, vel_4_plot);
+    ui->graph_canvas->graph(10)->addData(x_val, vel_5_plot);
+    ui->graph_canvas->graph(11)->addData(x_val, vel_6_plot);
   
 
  // ui->graph_canvas->xAxis->rescale();
@@ -339,6 +456,14 @@ void MainWindow::updateGraph() {
   jGraph3->rescaleValueAxis(false, true);
   jGraph4->rescaleValueAxis(false, true);
   jGraph5->rescaleValueAxis(false, true);
+
+  vGraph0->rescaleValueAxis(false, true);
+  vGraph1->rescaleValueAxis(false, true);
+  vGraph2->rescaleValueAxis(false, true);
+  vGraph3->rescaleValueAxis(false, true);
+  vGraph4->rescaleValueAxis(false, true);
+  vGraph5->rescaleValueAxis(false, true);
+  
   ui->graph_canvas->xAxis->setRange(ui->graph_canvas->xAxis->range().upper, 30, Qt::AlignRight);
   
   // update the vertical axis tag positions and texts to match the rightmost data point of the graphs:
@@ -348,18 +473,41 @@ void MainWindow::updateGraph() {
   double jgraph4Value = jGraph3->dataMainValue(jGraph3->dataCount()-1);
   double jgraph5Value = jGraph4->dataMainValue(jGraph4->dataCount()-1);
   double jgraph6Value = jGraph5->dataMainValue(jGraph5->dataCount()-1);
+
+  double vgraph1Value = vGraph0->dataMainValue(vGraph0->dataCount()-1);
+  double vgraph2Value = vGraph1->dataMainValue(vGraph1->dataCount()-1);
+  double vgraph3Value = vGraph2->dataMainValue(vGraph2->dataCount()-1);
+  double vgraph4Value = vGraph3->dataMainValue(vGraph3->dataCount()-1);
+  double vgraph5Value = vGraph4->dataMainValue(vGraph4->dataCount()-1);
+  double vgraph6Value = vGraph5->dataMainValue(vGraph5->dataCount()-1);
+
   jTag0->updatePosition(jgraph1Value);
   jTag1->updatePosition(jgraph2Value);
   jTag2->updatePosition(jgraph3Value);
   jTag3->updatePosition(jgraph4Value);
   jTag4->updatePosition(jgraph5Value);
   jTag5->updatePosition(jgraph6Value);
+
+  vTag0->updatePosition(vgraph1Value);
+  vTag1->updatePosition(vgraph2Value);
+  vTag2->updatePosition(vgraph3Value);
+  vTag3->updatePosition(vgraph4Value);
+  vTag4->updatePosition(vgraph5Value);
+  vTag5->updatePosition(vgraph6Value);
+
   jTag0->setText(QString::number(jgraph1Value, 'f', 2));
   jTag1->setText(QString::number(jgraph2Value, 'f', 2));
   jTag2->setText(QString::number(jgraph3Value, 'f', 2));
   jTag3->setText(QString::number(jgraph4Value, 'f', 2));
   jTag4->setText(QString::number(jgraph5Value, 'f', 2));
   jTag5->setText(QString::number(jgraph6Value, 'f', 2));
+
+  vTag0->setText(QString::number(vgraph1Value, 'f', 2));
+  vTag1->setText(QString::number(vgraph2Value, 'f', 2));
+  vTag2->setText(QString::number(vgraph3Value, 'f', 2));
+  vTag3->setText(QString::number(vgraph4Value, 'f', 2));
+  vTag4->setText(QString::number(vgraph5Value, 'f', 2));
+  vTag5->setText(QString::number(vgraph6Value, 'f', 2));
   
  // mPlot->replot();
    ui->graph_canvas->rescaleAxes();
@@ -380,6 +528,19 @@ void MainWindow::mouseWheel()
     ui->graph_canvas->axisRect()->setRangeZoom(Qt::Horizontal|Qt::Vertical);
 }
 
+void MainWindow::mousePress()
+{
+  // if an axis is selected, only allow the direction of that axis to be dragged
+  // if no axis is selected, both directions may be dragged
+  
+  if (ui->graph_canvas->xAxis->selectedParts().testFlag(QCPAxis::spAxis))
+    ui->graph_canvas->axisRect()->setRangeDrag(ui->graph_canvas->xAxis->orientation());
+  else if (ui->graph_canvas->yAxis->selectedParts().testFlag(QCPAxis::spAxis))
+    ui->graph_canvas->axisRect()->setRangeDrag(ui->graph_canvas->yAxis->orientation());
+  else
+    ui->graph_canvas->axisRect()->setRangeDrag(Qt::Horizontal|Qt::Vertical);
+}
+
 void MainWindow::on_comboBox_currentIndexChanged(int index=0)
 {
   switch (index){
@@ -392,29 +553,88 @@ void MainWindow::on_comboBox_currentIndexChanged(int index=0)
     ui->graph_canvas->graph(3)->setVisible(true);
     ui->graph_canvas->graph(4)->setVisible(true);
     ui->graph_canvas->graph(5)->setVisible(true);
+    ui->graph_canvas->graph(6)->setVisible(true);
+    ui->graph_canvas->graph(7)->setVisible(true);
+    ui->graph_canvas->graph(8)->setVisible(true);
+    ui->graph_canvas->graph(9)->setVisible(true);
+    ui->graph_canvas->graph(10)->setVisible(true);
+    ui->graph_canvas->graph(11)->setVisible(true);    
+
+    jTag0->setVisibleArrow(true);
+    jTag1->setVisibleArrow(true);
+    jTag2->setVisibleArrow(true);
+    jTag3->setVisibleArrow(true);
+    jTag4->setVisibleArrow(true);
+    jTag5->setVisibleArrow(true);
+    vTag0->setVisibleArrow(true);
+    vTag1->setVisibleArrow(true);
+    vTag2->setVisibleArrow(true);
+    vTag3->setVisibleArrow(true);
+    vTag4->setVisibleArrow(true);
+    vTag5->setVisibleArrow(true);
+
+
    break;
  }
    case 1:
   {
     ui->graph_canvas->graph(0)->setVisible(true);
-    //mGraph11->setVisible(false);
     ui->graph_canvas->graph(1)->setVisible(false);
-    ui->graph_canvas->graph(2)->setVisible(true);
+    ui->graph_canvas->graph(2)->setVisible(false);
     ui->graph_canvas->graph(3)->setVisible(false);
     ui->graph_canvas->graph(4)->setVisible(false);
     ui->graph_canvas->graph(5)->setVisible(false);
+    ui->graph_canvas->graph(6)->setVisible(true);
+    ui->graph_canvas->graph(7)->setVisible(false);
+    ui->graph_canvas->graph(8)->setVisible(false);
+    ui->graph_canvas->graph(9)->setVisible(false);
+    ui->graph_canvas->graph(10)->setVisible(false);
+    ui->graph_canvas->graph(11)->setVisible(false); 
+
+    jTag0->setVisibleArrow(true);
+    jTag1->setVisibleArrow(false);
+    jTag2->setVisibleArrow(false);
+    jTag3->setVisibleArrow(false);
+    jTag4->setVisibleArrow(false);
+    jTag5->setVisibleArrow(false);
+    vTag0->setVisibleArrow(true);
+    vTag1->setVisibleArrow(false);
+    vTag2->setVisibleArrow(false);
+    vTag3->setVisibleArrow(false);
+    vTag4->setVisibleArrow(false);
+    vTag5->setVisibleArrow(false);
+
+
 
    break;
   }
    case 2:
  {
     ui->graph_canvas->graph(0)->setVisible(false);
-    //mGraph1->setVisible(false);
     ui->graph_canvas->graph(1)->setVisible(true);
     ui->graph_canvas->graph(2)->setVisible(false);
     ui->graph_canvas->graph(3)->setVisible(false);
     ui->graph_canvas->graph(4)->setVisible(false);
     ui->graph_canvas->graph(5)->setVisible(false);
+    ui->graph_canvas->graph(6)->setVisible(false);
+    ui->graph_canvas->graph(7)->setVisible(true);
+    ui->graph_canvas->graph(8)->setVisible(false);
+    ui->graph_canvas->graph(9)->setVisible(false);
+    ui->graph_canvas->graph(10)->setVisible(false);
+    ui->graph_canvas->graph(11)->setVisible(false); 
+
+    jTag0->setVisibleArrow(false);
+    jTag1->setVisibleArrow(true);
+    jTag2->setVisibleArrow(false);
+    jTag3->setVisibleArrow(false);
+    jTag4->setVisibleArrow(false);
+    jTag5->setVisibleArrow(false);
+    vTag0->setVisibleArrow(false);
+    vTag1->setVisibleArrow(true);
+    vTag2->setVisibleArrow(false);
+    vTag3->setVisibleArrow(false);
+    vTag4->setVisibleArrow(false);
+    vTag5->setVisibleArrow(false);
    break;
  }
 
@@ -426,6 +646,25 @@ void MainWindow::on_comboBox_currentIndexChanged(int index=0)
     ui->graph_canvas->graph(3)->setVisible(false);
     ui->graph_canvas->graph(4)->setVisible(false);
     ui->graph_canvas->graph(5)->setVisible(false);
+    ui->graph_canvas->graph(6)->setVisible(false);
+    ui->graph_canvas->graph(7)->setVisible(false);
+    ui->graph_canvas->graph(8)->setVisible(true);
+    ui->graph_canvas->graph(9)->setVisible(false);
+    ui->graph_canvas->graph(10)->setVisible(false);
+    ui->graph_canvas->graph(11)->setVisible(false); 
+
+    jTag0->setVisibleArrow(false);
+    jTag1->setVisibleArrow(false);
+    jTag2->setVisibleArrow(true);
+    jTag3->setVisibleArrow(false);
+    jTag4->setVisibleArrow(false);
+    jTag5->setVisibleArrow(false);
+    vTag0->setVisibleArrow(false);
+    vTag1->setVisibleArrow(false);
+    vTag2->setVisibleArrow(true);
+    vTag3->setVisibleArrow(false);
+    vTag4->setVisibleArrow(false);
+    vTag5->setVisibleArrow(false);
    break;
  }
 
@@ -437,6 +676,25 @@ void MainWindow::on_comboBox_currentIndexChanged(int index=0)
     ui->graph_canvas->graph(3)->setVisible(true);
     ui->graph_canvas->graph(4)->setVisible(false);
     ui->graph_canvas->graph(5)->setVisible(false);
+    ui->graph_canvas->graph(6)->setVisible(false);
+    ui->graph_canvas->graph(7)->setVisible(false);
+    ui->graph_canvas->graph(8)->setVisible(false);
+    ui->graph_canvas->graph(9)->setVisible(true);
+    ui->graph_canvas->graph(10)->setVisible(false);
+    ui->graph_canvas->graph(11)->setVisible(false); 
+
+    jTag0->setVisibleArrow(false);
+    jTag1->setVisibleArrow(false);
+    jTag2->setVisibleArrow(false);
+    jTag3->setVisibleArrow(true);
+    jTag4->setVisibleArrow(false);
+    jTag5->setVisibleArrow(false);
+    vTag0->setVisibleArrow(false);
+    vTag1->setVisibleArrow(false);
+    vTag2->setVisibleArrow(false);
+    vTag3->setVisibleArrow(true);
+    vTag4->setVisibleArrow(false);
+    vTag5->setVisibleArrow(false);
    break;
  }
     case 5:
@@ -447,6 +705,25 @@ void MainWindow::on_comboBox_currentIndexChanged(int index=0)
     ui->graph_canvas->graph(3)->setVisible(false);
     ui->graph_canvas->graph(4)->setVisible(true);
     ui->graph_canvas->graph(5)->setVisible(false);
+    ui->graph_canvas->graph(6)->setVisible(false);
+    ui->graph_canvas->graph(7)->setVisible(false);
+    ui->graph_canvas->graph(8)->setVisible(false);
+    ui->graph_canvas->graph(9)->setVisible(false);
+    ui->graph_canvas->graph(10)->setVisible(true);
+    ui->graph_canvas->graph(11)->setVisible(false); 
+
+    jTag0->setVisibleArrow(false);
+    jTag1->setVisibleArrow(false);
+    jTag2->setVisibleArrow(false);
+    jTag3->setVisibleArrow(false);
+    jTag4->setVisibleArrow(true);
+    jTag5->setVisibleArrow(false);
+    vTag0->setVisibleArrow(false);
+    vTag1->setVisibleArrow(false);
+    vTag2->setVisibleArrow(false);
+    vTag3->setVisibleArrow(false);
+    vTag4->setVisibleArrow(true);
+    vTag5->setVisibleArrow(false);
    break;
  }
     case 6:
@@ -457,6 +734,25 @@ void MainWindow::on_comboBox_currentIndexChanged(int index=0)
     ui->graph_canvas->graph(3)->setVisible(false);
     ui->graph_canvas->graph(4)->setVisible(false);
     ui->graph_canvas->graph(5)->setVisible(true);
+    ui->graph_canvas->graph(6)->setVisible(false);
+    ui->graph_canvas->graph(7)->setVisible(false);
+    ui->graph_canvas->graph(8)->setVisible(false);
+    ui->graph_canvas->graph(9)->setVisible(false);
+    ui->graph_canvas->graph(10)->setVisible(false);
+    ui->graph_canvas->graph(11)->setVisible(true); 
+
+    jTag0->setVisibleArrow(false);
+    jTag1->setVisibleArrow(false);
+    jTag2->setVisibleArrow(false);
+    jTag3->setVisibleArrow(false);
+    jTag4->setVisibleArrow(false);
+    jTag5->setVisibleArrow(true);
+    vTag0->setVisibleArrow(false);
+    vTag1->setVisibleArrow(false);
+    vTag2->setVisibleArrow(false);
+    vTag3->setVisibleArrow(false);
+    vTag4->setVisibleArrow(false);
+    vTag5->setVisibleArrow(true);
    break;
  }
 
@@ -670,10 +966,10 @@ void MainWindow::joint_Gz_Callback(const trajectory_msgs::JointTrajectory &msg) 
 
     vel_1_plot = msg.points[1].positions[1];
     vel_2_plot = msg.points[1].positions[2];
-    vel_3_plot = msg.points[1].positions[3]*ToG;
-    vel_4_plot = msg.points[1].positions[4]*ToG;
-    vel_5_plot = msg.points[1].positions[5]*ToG;
-    vel_6_plot = msg.points[1].positions[6]*ToG;
+    vel_3_plot = msg.points[1].positions[3];
+    vel_4_plot = msg.points[1].positions[4];
+    vel_5_plot = msg.points[1].positions[5];
+    vel_6_plot = msg.points[1].positions[6];
 
   std::cout<<joint_1_plot<<"\n"<<joint_2_plot<<std::endl;
 

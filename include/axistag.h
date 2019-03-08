@@ -48,6 +48,8 @@ public:
   
   // other methods:
   void updatePosition(double value);
+
+  void 	setVisibleArrow (bool on);
   
 protected:
   QCPAxis *mAxis;

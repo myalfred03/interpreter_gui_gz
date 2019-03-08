@@ -110,7 +110,10 @@ private:
 public slots:
 
   void mouseMoved(QMouseEvent * event);
+  void contextMenuRequest(QPoint pos);
+  void moveLegend();  
   void updateGraph();
+  void mousePress();
   void mouseWheel();
   void removeAllGraphs();
   void changeSaveState(){
