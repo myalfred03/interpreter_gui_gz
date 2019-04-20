@@ -87,7 +87,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
-        MainWindow->resize(620, 662);
+        MainWindow->resize(775, 596);
         MainWindow->setWindowTitle(QStringLiteral("Robot Script Editor"));
         QIcon icon;
         icon.addFile(QStringLiteral(":/img/UNI-Script.png"), QSize(), QIcon::Normal, QIcon::Off);
@@ -204,8 +204,8 @@ public:
         sizePolicy1.setHeightForWidth(doubleSpinBox_3->sizePolicy().hasHeightForWidth());
         doubleSpinBox_3->setSizePolicy(sizePolicy1);
         doubleSpinBox_3->setDecimals(3);
-        doubleSpinBox_3->setMinimum(-50);
-        doubleSpinBox_3->setMaximum(50);
+        doubleSpinBox_3->setMinimum(-100);
+        doubleSpinBox_3->setMaximum(100);
         doubleSpinBox_3->setSingleStep(0.1);
 
         gridLayout->addWidget(doubleSpinBox_3, 3, 4, 1, 1);
@@ -215,8 +215,8 @@ public:
         sizePolicy1.setHeightForWidth(doubleSpinBox_2->sizePolicy().hasHeightForWidth());
         doubleSpinBox_2->setSizePolicy(sizePolicy1);
         doubleSpinBox_2->setDecimals(3);
-        doubleSpinBox_2->setMinimum(-50);
-        doubleSpinBox_2->setMaximum(50);
+        doubleSpinBox_2->setMinimum(-100);
+        doubleSpinBox_2->setMaximum(100);
         doubleSpinBox_2->setSingleStep(0.1);
 
         gridLayout->addWidget(doubleSpinBox_2, 3, 1, 1, 1);
@@ -228,6 +228,7 @@ public:
         sizePolicy2.setVerticalStretch(0);
         sizePolicy2.setHeightForWidth(label_3->sizePolicy().hasHeightForWidth());
         label_3->setSizePolicy(sizePolicy2);
+        label_3->setMinimumSize(QSize(0, 22));
         label_3->setMaximumSize(QSize(16777215, 10));
         label_3->setAlignment(Qt::AlignCenter);
 
@@ -238,8 +239,8 @@ public:
         sizePolicy1.setHeightForWidth(doubleSpinBox->sizePolicy().hasHeightForWidth());
         doubleSpinBox->setSizePolicy(sizePolicy1);
         doubleSpinBox->setDecimals(3);
-        doubleSpinBox->setMinimum(-50);
-        doubleSpinBox->setMaximum(50);
+        doubleSpinBox->setMinimum(-100);
+        doubleSpinBox->setMaximum(100);
         doubleSpinBox->setSingleStep(0.1);
 
         gridLayout->addWidget(doubleSpinBox, 3, 0, 1, 1);
@@ -248,6 +249,7 @@ public:
         label_2->setObjectName(QStringLiteral("label_2"));
         sizePolicy2.setHeightForWidth(label_2->sizePolicy().hasHeightForWidth());
         label_2->setSizePolicy(sizePolicy2);
+        label_2->setMinimumSize(QSize(0, 22));
         label_2->setMaximumSize(QSize(16777215, 10));
         label_2->setAlignment(Qt::AlignCenter);
 
@@ -257,6 +259,7 @@ public:
         label->setObjectName(QStringLiteral("label"));
         sizePolicy2.setHeightForWidth(label->sizePolicy().hasHeightForWidth());
         label->setSizePolicy(sizePolicy2);
+        label->setMinimumSize(QSize(0, 22));
         label->setMaximumSize(QSize(16777215, 10));
         label->setAlignment(Qt::AlignCenter);
 
@@ -384,7 +387,7 @@ public:
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 620, 19));
+        menuBar->setGeometry(QRect(0, 0, 775, 19));
         menu = new QMenu(menuBar);
         menu->setObjectName(QStringLiteral("menu"));
         menuEdit_O = new QMenu(menuBar);
@@ -494,9 +497,9 @@ public:
 #ifndef QT_NO_TOOLTIP
         actionError_Datos->setToolTip(QApplication::translate("MainWindow", "<html><head/><body><p>Este icono se activara si se ingreso un par\303\241metro al robot fuera de su espacio de trabajo.</p><p>Favor Leer la Hoja de Datos del robot a controlar.</p></body></html>", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
-        label_3->setText(QApplication::translate("MainWindow", "D", Q_NULLPTR));
-        label_2->setText(QApplication::translate("MainWindow", "I", Q_NULLPTR));
-        label->setText(QApplication::translate("MainWindow", "P", Q_NULLPTR));
+        label_3->setText(QApplication::translate("MainWindow", "<html><head/><body><p><span style=\" font-size:9pt; color:#ffffff;\">D</span></p></body></html>", Q_NULLPTR));
+        label_2->setText(QApplication::translate("MainWindow", "<html><head/><body><p><span style=\" font-size:10pt; color:#ffffff;\">I</span></p></body></html>", Q_NULLPTR));
+        label->setText(QApplication::translate("MainWindow", "<html><head/><body><p><span style=\" font-size:10pt; color:#ffffff;\">P</span></p></body></html>", Q_NULLPTR));
         pushButton->setText(QApplication::translate("MainWindow", "Send Value PID", Q_NULLPTR));
         pushButton_2->setText(QApplication::translate("MainWindow", "Clear Graph", Q_NULLPTR));
         label_4->setText(QApplication::translate("MainWindow", "X/Y", Q_NULLPTR));
@@ -509,6 +512,7 @@ public:
          << QApplication::translate("MainWindow", "Show Joint 4", Q_NULLPTR)
          << QApplication::translate("MainWindow", "Show Joint 5", Q_NULLPTR)
          << QApplication::translate("MainWindow", "Show Joint 6", Q_NULLPTR)
+         << QApplication::translate("MainWindow", "Show Only Joint", Q_NULLPTR)
         );
         comboBox_2->clear();
         comboBox_2->insertItems(0, QStringList()
@@ -519,9 +523,9 @@ public:
          << QApplication::translate("MainWindow", "joint_5", Q_NULLPTR)
          << QApplication::translate("MainWindow", "joint_6", Q_NULLPTR)
         );
-        label_5->setText(QApplication::translate("MainWindow", "Joint To Set [Select]", Q_NULLPTR));
-        label_6->setText(QApplication::translate("MainWindow", "IMax", Q_NULLPTR));
-        label_7->setText(QApplication::translate("MainWindow", "IMin", Q_NULLPTR));
+        label_5->setText(QApplication::translate("MainWindow", "<html><head/><body><p><span style=\" font-size:10pt; color:#ffffff;\">Joint To Set [Select]</span></p></body></html>", Q_NULLPTR));
+        label_6->setText(QApplication::translate("MainWindow", "<html><head/><body><p><span style=\" font-size:10pt; color:#ffffff;\">IMax</span></p></body></html>", Q_NULLPTR));
+        label_7->setText(QApplication::translate("MainWindow", "<html><head/><body><p><span style=\" font-size:10pt; color:#ffffff;\">IMin</span></p></body></html>", Q_NULLPTR));
         menu->setTitle(QApplication::translate("MainWindow", "Archivo", Q_NULLPTR));
         menuEdit_O->setTitle(QApplication::translate("MainWindow", "Editar", Q_NULLPTR));
         menuHelp_H->setTitle(QApplication::translate("MainWindow", "Help", Q_NULLPTR));

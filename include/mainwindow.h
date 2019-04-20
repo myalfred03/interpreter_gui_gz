@@ -16,6 +16,7 @@
 #include <ros/ros.h>
 #include <trajectory_msgs/JointTrajectory.h>
 #include <std_msgs/Float32MultiArray.h>
+#include <control_msgs/JointControllerState.h>
 #include <boost/bind.hpp>
 #include <std_msgs/String.h>
 #include "axistag.h"
@@ -36,7 +37,7 @@ public:
 
   ros::Publisher joint_pub,pid_value_pub;
   // ros::Subscriber joint_sub_limit;
-  ros::Subscriber joint_sub_gazebo;
+  ros::Subscriber joint_sub_gazebo,joint_sub_gazebo2 ,joint_sub_gazebo3 ,joint_sub_gazebo4 ,joint_sub_gazebo5 ,joint_sub_gazebo6 ,joint_sub_gazebo7;
 
   ros::NodeHandle nh_;
   std_msgs::Float32MultiArray limit ;
@@ -127,7 +128,15 @@ public slots:
     this->setWindowTitle(tr("Robot Editor Script - ")+fileName+tr("*"));
   }
   // void jointsizeCallback(const std_msgs::Float32MultiArray::ConstPtr &msglimit);
-  void joint_Gz_Callback(const trajectory_msgs::JointTrajectory &msg);
+ // void joint_Gz_Callback(const   control_msgs::JointControllerState &msg);
+  void joint_Gz_Callback(const   trajectory_msgs::JointTrajectory &msg);
+  void joint_Gz_Callback2(const  control_msgs::JointControllerState &msg);
+  void joint_Gz_Callback3(const  control_msgs::JointControllerState &msg);
+  void joint_Gz_Callback4(const  control_msgs::JointControllerState &msg);
+  void joint_Gz_Callback5(const  control_msgs::JointControllerState &msg);
+  void joint_Gz_Callback6(const  control_msgs::JointControllerState &msg);
+  void joint_Gz_Callback7(const  control_msgs::JointControllerState &msg);
+
   void newFile();
   void saveFile();
   void openFile();

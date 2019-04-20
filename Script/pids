@@ -1,0 +1,12 @@
+PID Kuka kr16
+		P	I	D
+joint 1 = 	25	0	2.1
+joint 2 = 	30 	0 	8.1
+joint 3 = 	70 	0	49.1
+
+
+
+PID Transmitions
+joint 1 = 	25	0	2.1
+joint 2 = 	30 	0 	8.1
+joint 3 = 	70 	0	49.1

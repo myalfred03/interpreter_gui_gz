@@ -101,10 +101,17 @@ MainWindow::MainWindow(QWidget *parent) :
   msgolder.points.resize(1);
   msgolder.points[0].positions.resize(6);
 
-   joint_pub =       nh_.advertise<trajectory_msgs::JointTrajectory>("set_joint_trajectory", 1);
+   joint_pub =       nh_.advertise<trajectory_msgs::JointTrajectory>("set_joint_trajectory", 10);
 // joint_sub_limit = nh_.subscribe("/joint_limits",10,&MainWindow::jointsizeCallback, this);
    pid_value_pub   = nh_.advertise<trajectory_msgs::JointTrajectory>("pid_value", 10);
-   joint_sub_gazebo= nh_.subscribe("/gazebo_client/joint_values_gazebo",10,&MainWindow::joint_Gz_Callback, this);
+   joint_sub_gazebo= nh_.subscribe("/gazebo_client/joint_values_gazebo",1,&MainWindow::joint_Gz_Callback, this);
+
+   joint_sub_gazebo2= nh_.subscribe("/irb120/joint_1_position_controller/state" ,1,&MainWindow::joint_Gz_Callback2, this);
+   joint_sub_gazebo3= nh_.subscribe("/irb120/joint_2_position_controller/state" ,1,&MainWindow::joint_Gz_Callback3, this);
+   joint_sub_gazebo4= nh_.subscribe("/irb120/joint_3_position_controller/state" ,1,&MainWindow::joint_Gz_Callback4, this);
+   joint_sub_gazebo5= nh_.subscribe("/irb120/joint_4_position_controller/state" ,1,&MainWindow::joint_Gz_Callback5, this);
+   joint_sub_gazebo6= nh_.subscribe("/irb120/joint_5_position_controller/state" ,1,&MainWindow::joint_Gz_Callback6, this);
+   joint_sub_gazebo7= nh_.subscribe("/irb120/joint_6_position_controller/state" ,1,&MainWindow::joint_Gz_Callback7, this);
 
    spinner = boost::shared_ptr<ros::AsyncSpinner>(new ros::AsyncSpinner(1));
    spinner->start();
@@ -756,6 +763,37 @@ void MainWindow::on_comboBox_currentIndexChanged(int index=0)
    break;
  }
 
+    case 7:
+ {
+    // ui->graph_canvas->graph(0)->setVisible(false);
+    // ui->graph_canvas->graph(1)->setVisible(false);
+    // ui->graph_canvas->graph(2)->setVisible(false);
+    // ui->graph_canvas->graph(3)->setVisible(false);
+    // ui->graph_canvas->graph(4)->setVisible(false);
+    // ui->graph_canvas->graph(5)->setVisible(true);
+    ui->graph_canvas->graph(6)->setVisible(false);
+    ui->graph_canvas->graph(7)->setVisible(false);
+    ui->graph_canvas->graph(8)->setVisible(false);
+    ui->graph_canvas->graph(9)->setVisible(false);
+    ui->graph_canvas->graph(10)->setVisible(false);
+    ui->graph_canvas->graph(11)->setVisible(false); 
+
+    // jTag0->setVisibleArrow(false);
+    // jTag1->setVisibleArrow(false);
+    // jTag2->setVisibleArrow(false);
+    // jTag3->setVisibleArrow(false);
+    // jTag4->setVisibleArrow(false);
+    // jTag5->setVisibleArrow(true);
+    vTag0->setVisibleArrow(false);
+    vTag1->setVisibleArrow(false);
+    vTag2->setVisibleArrow(false);
+    vTag3->setVisibleArrow(false);
+    vTag4->setVisibleArrow(false);
+    vTag5->setVisibleArrow(false);
+   break;
+ }
+
+
   }
 }
 
@@ -767,11 +805,20 @@ void MainWindow::pid_value(){
         pidmsg.joint_names.clear();
         pidmsg.points.resize(1);
         pidmsg.points[0].positions.resize(5);
+        pidmsg.points[0].velocities.resize(1);
+
+
   pidmsg.points[0].positions[0] = ui->doubleSpinBox->   value();
   pidmsg.points[0].positions[1] = ui->doubleSpinBox_2-> value();
   pidmsg.points[0].positions[2] = ui->doubleSpinBox_3-> value();
   pidmsg.points[0].positions[3] = ui->doubleSpinBox_4-> value();
   pidmsg.points[0].positions[4] = ui->doubleSpinBox_5-> value();
+
+  pidmsg.points[0].velocities[0] = ui->comboBox_2->currentIndex();
+
+
+
+
   vJoint = ui->comboBox_2->currentText();
   joint  = vJoint.toUtf8().constData();
   pidmsg.joint_names.push_back(joint);
@@ -953,23 +1000,24 @@ void MainWindow::run(){
 
 // }
 
-void MainWindow::joint_Gz_Callback(const trajectory_msgs::JointTrajectory &msg) //Valores de los limtes de los joints
+void MainWindow::joint_Gz_Callback2(const control_msgs::JointControllerState &msg) //Valores de los limtes de los joints
 {
   std::cout<<"gazebo joints"<< std::endl;
+control_msgs::JointControllerState ms1;
+//ms1.process_value_dot
+    joint_1_plot = msg.process_value*ToG;
+//    joint_2_plot = msg.points[0].positions[2]*ToG;
+//    joint_3_plot = msg.points[0].positions[3]*ToG;
+//    joint_4_plot = msg.points[0].positions[4]*ToG;
+//    joint_5_plot = msg.points[0].positions[5]*ToG;
+//    joint_6_plot = msg.points[0].positions[6]*ToG;
 
-    joint_1_plot = msg.points[0].positions[1]*ToG;
-    joint_2_plot = msg.points[0].positions[2]*ToG;
-    joint_3_plot = msg.points[0].positions[3]*ToG;
-    joint_4_plot = msg.points[0].positions[4]*ToG;
-    joint_5_plot = msg.points[0].positions[5]*ToG;
-    joint_6_plot = msg.points[0].positions[6]*ToG;
-
-    vel_1_plot = msg.points[1].positions[1];
-    vel_2_plot = msg.points[1].positions[2];
-    vel_3_plot = msg.points[1].positions[3];
-    vel_4_plot = msg.points[1].positions[4];
-    vel_5_plot = msg.points[1].positions[5];
-    vel_6_plot = msg.points[1].positions[6];
+    vel_1_plot = msg.process_value_dot*ToG;
+//    vel_2_plot = msg.points[1].positions[2];
+//    vel_3_plot = msg.points[1].positions[3];
+//    vel_4_plot = msg.points[1].positions[4];
+//    vel_5_plot = msg.points[1].positions[5];
+//    vel_6_plot = msg.points[1].positions[6];
 
   std::cout<<joint_1_plot<<"\n"<<joint_2_plot<<std::endl;
 
@@ -982,6 +1030,77 @@ void MainWindow::joint_Gz_Callback(const trajectory_msgs::JointTrajectory &msg) 
 
 
 }
+
+void MainWindow::joint_Gz_Callback3(const control_msgs::JointControllerState &msg) //Valores de los limtes de los joints
+{
+
+    joint_2_plot = msg.process_value*ToG;
+    vel_2_plot = msg.process_value_dot*ToG;
+
+}
+
+void MainWindow::joint_Gz_Callback4(const control_msgs::JointControllerState &msg) //Valores de los limtes de los joints
+{
+
+    joint_3_plot = msg.process_value*ToG;
+    vel_3_plot = msg.process_value_dot*ToG;
+
+}
+
+void MainWindow::joint_Gz_Callback5(const control_msgs::JointControllerState &msg) //Valores de los limtes de los joints
+{
+
+    joint_4_plot = msg.process_value*ToG;
+    vel_4_plot = msg.process_value_dot*ToG;
+
+}
+
+void MainWindow::joint_Gz_Callback6(const control_msgs::JointControllerState &msg) //Valores de los limtes de los joints
+{
+
+    joint_5_plot = msg.process_value*ToG;
+    vel_5_plot = msg.process_value_dot*ToG;
+
+}
+
+void MainWindow::joint_Gz_Callback7(const control_msgs::JointControllerState &msg) //Valores de los limtes de los joints
+{
+
+    joint_6_plot = msg.process_value*ToG;
+    vel_6_plot = msg.process_value_dot*ToG;
+
+}
+
+void MainWindow::joint_Gz_Callback(const trajectory_msgs::JointTrajectory &msg) //Valores de los limtes de los joints
+{
+  std::cout<<"gazebo joints"<< std::endl;
+//ms1.process_value_dot
+   joint_1_plot = msg.points[0].positions[0]*ToG;
+   joint_2_plot = msg.points[0].positions[1]*ToG;
+   joint_3_plot = msg.points[0].positions[2]*ToG;
+   joint_4_plot = msg.points[0].positions[3]*ToG;
+   joint_5_plot = msg.points[0].positions[4]*ToG;
+   joint_6_plot = msg.points[0].positions[5]*ToG;
+
+   vel_1_plot = msg.points[1].positions[0];
+   vel_2_plot = msg.points[1].positions[1];
+   vel_3_plot = msg.points[1].positions[2];
+   vel_4_plot = msg.points[1].positions[3];
+   vel_5_plot = msg.points[1].positions[4];
+   vel_6_plot = msg.points[1].positions[5];
+
+  std::cout<<joint_1_plot<<"\n"<<joint_2_plot<<std::endl;
+
+     // joint_positions_["joint_1"]= msg.points[0].positions[0]/ToG;
+     // joint_positions_["joint_2"]= msg.points[0].positions[1]/ToG;
+     // joint_positions_["joint_3"]= msg.points[0].positions[2]/ToG;
+     // joint_positions_["joint_4"]= msg.points[0].positions[3]/ToG;
+     // joint_positions_["joint_5"]= msg.points[0].positions[4]/ToG;
+     // joint_positions_["joint_6"]= msg.points[0].positions[5]/ToG;
+
+
+}
+
 
 void MainWindow::updatevalues(){
   std::cout<<"Signal is OK"<< std::endl;
@@ -1086,7 +1205,7 @@ trajectory_msgs::JointTrajectory MainWindow::comandos(std::string &comando, int 
               }
               else {
                 comandoP.positions[1] = 0.00;
-                comandoP.velocities[0] = 0.00;
+                comandoP.velocities[1] = 0.00;
                 msg1.joint_names.push_back("joint_2");
                 msg1.points.push_back(comandoP);
 //                msg1.points[i-1].positions[1] = 0.00;
@@ -1116,7 +1235,7 @@ trajectory_msgs::JointTrajectory MainWindow::comandos(std::string &comando, int 
               }
             else {
               comandoP.positions[2] = 0.00;
-              comandoP.velocities[0] = 0.00;
+              comandoP.velocities[2] = 0.00;
               msg1.joint_names.push_back("joint_3");
               msg1.points.push_back(comandoP);
               this->updateError();
@@ -1145,7 +1264,7 @@ trajectory_msgs::JointTrajectory MainWindow::comandos(std::string &comando, int 
               }
             else {
               comandoP.positions[3] = 0.00;
-              comandoP.velocities[0] = 0.00;
+              comandoP.velocities[3] = 0.00;
               msg1.joint_names.push_back("joint_4");
               msg1.points.push_back(comandoP);
               this->updateError();
@@ -1174,7 +1293,7 @@ trajectory_msgs::JointTrajectory MainWindow::comandos(std::string &comando, int 
               }
             else {
               comandoP.positions[4] = 0.00;
-              comandoP.velocities[0] = 0.00;
+              comandoP.velocities[4] = 0.00;
               msg1.joint_names.push_back("joint_5");
               msg1.points.push_back(comandoP);
               this->updateError();
@@ -1203,7 +1322,7 @@ trajectory_msgs::JointTrajectory MainWindow::comandos(std::string &comando, int 
               }
             else {
               comandoP.positions[5] = 0.00;
-              comandoP.velocities[0] = 0.00;
+              comandoP.velocities[5] = 0.00;
               msg1.joint_names.push_back("joint_6");
               msg1.points.push_back(comandoP);
               this->updateError();
