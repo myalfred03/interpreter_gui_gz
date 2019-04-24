@@ -20,7 +20,10 @@
 #include <boost/bind.hpp>
 #include <std_msgs/String.h>
 #include "axistag.h"
-
+#include <dynamic_reconfigure/DoubleParameter.h>
+#include <dynamic_reconfigure/BoolParameter.h>
+#include <dynamic_reconfigure/Reconfigure.h>
+#include <dynamic_reconfigure/Config.h>
 //#include <moveit/robot_trajectory/robot_trajectory.h>
 
 namespace Ui {
@@ -154,7 +157,10 @@ public slots:
 public Q_SLOTS:
   void updatevalues();
   void on_comboBox_currentIndexChanged(int index);
+ // void on_comboBox_2_currentIndexChanged(int index);
+
   void pid_value();
+  void pid_value_2();
 
 
 Q_SIGNALS:

@@ -48,7 +48,8 @@ MainWindow::MainWindow(QWidget *parent) :
   connect(ui->actionAbout,    SIGNAL(triggered(bool)),            this, SLOT(about()));
 
   connect(ui->pushButton,     SIGNAL(clicked()),                  this, SLOT(pid_value()));
-  
+  connect(ui->pushButton,     SIGNAL(clicked()),                  this, SLOT(pid_value_2()));
+
 
   fileSaved=true;
 //  msg1.points.resize(1);
@@ -96,6 +97,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->graph_canvas,  SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextMenuRequest(QPoint)));
 
     connect(ui->comboBox,      SIGNAL(currentIndexChanged(int)), this, SLOT(on_comboBox_currentIndexChanged(int)));
+   // connect(ui->comboBox_2,      SIGNAL(currentIndexChanged(int)), this, SLOT(on_comboBox_2_currentIndexChanged(int)));
 
 
   msgolder.points.resize(1);
@@ -826,6 +828,98 @@ void MainWindow::pid_value(){
   pid_value_pub.publish(pidmsg);
 
 }
+
+
+void MainWindow::pid_value_2()
+
+//on_comboBox_2_currentIndexChanged(int index=0)
+{
+  int indexPID;
+  bool enableAW = false;
+  dynamic_reconfigure::ReconfigureRequest srv_req;
+  dynamic_reconfigure::ReconfigureResponse srv_resp;
+  dynamic_reconfigure::BoolParameter enable_param;
+  dynamic_reconfigure::DoubleParameter double_param_p;
+  dynamic_reconfigure::DoubleParameter double_param_i;
+  dynamic_reconfigure::DoubleParameter double_param_d;  
+  dynamic_reconfigure::Config conf;
+
+
+
+  enable_param.name = "antiwindup";
+  enable_param.value = enableAW;
+  conf.bools.push_back(enable_param);
+
+  double_param_p.name = "p";
+  double_param_p.value = ui->doubleSpinBox->   value();;
+  conf.doubles.push_back(double_param_p);
+
+  double_param_i.name = "i";
+  double_param_i.value = ui->doubleSpinBox_2->   value();;
+  conf.doubles.push_back(double_param_i);
+
+  double_param_d.name = "d";
+  double_param_d.value = ui->doubleSpinBox_3->   value();;
+  conf.doubles.push_back(double_param_d);
+
+  srv_req.config = conf;
+  indexPID = ui->comboBox_2->currentIndex();
+
+  switch (indexPID){
+   case 0:
+  {
+      if (ros::service::call("/irb120/joint_1_position_controller/pid/set_parameters", srv_req, srv_resp)) {
+        ROS_INFO("call to set joint_1_position_controller parameters succeeded");
+      } else {
+        ROS_INFO("call to set joint_1_position_controller parameters failed");
+      }
+
+   break;
+  }
+
+   case 1:
+ {
+      if (ros::service::call("/irb120/joint_2_position_controller/pid/set_parameters", srv_req, srv_resp)) {
+        ROS_INFO("call to set joint_2_position_controller parameters succeeded");
+      } else {
+        ROS_INFO("call to set joint_2_position_controller parameters failed");
+      }
+   
+   break;
+ }
+   case 2:
+  {
+      if (ros::service::call("/irb120/joint_3_position_controller/pid/set_parameters", srv_req, srv_resp)) {
+        ROS_INFO("call to set joint_3_position_controller parameters succeeded");
+      } else {
+        ROS_INFO("call to set joint_3_position_controller parameters failed");
+      }    
+    
+   break;
+  }
+   case 3:
+ {
+      if (ros::service::call("/irb120/joint_4_position_controller/pid/set_parameters", srv_req, srv_resp)) {
+        ROS_INFO("call to set joint_4_position_controller parameters succeeded");
+      } else {
+        ROS_INFO("call to set joint_4_position_controller parameters failed");
+      }
+         
+   break;
+ }
+   case 4:
+ {
+      if (ros::service::call("/irb120/joint_5_position_controller/pid/set_parameters", srv_req, srv_resp)) {
+        ROS_INFO("call to set joint_5_position_controller parameters succeeded");
+      } else {
+        ROS_INFO("call to set joint_5_position_controller parameters failed");
+      }
+  
+   break;
+   }
+  }
+}
+
 
 void MainWindow::setUpHighlighter(){
   QFont font;

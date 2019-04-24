@@ -204,9 +204,10 @@ public:
         sizePolicy1.setHeightForWidth(doubleSpinBox_3->sizePolicy().hasHeightForWidth());
         doubleSpinBox_3->setSizePolicy(sizePolicy1);
         doubleSpinBox_3->setDecimals(3);
-        doubleSpinBox_3->setMinimum(-100);
-        doubleSpinBox_3->setMaximum(100);
-        doubleSpinBox_3->setSingleStep(0.1);
+        doubleSpinBox_3->setMinimum(-10);
+        doubleSpinBox_3->setMaximum(10000);
+        doubleSpinBox_3->setSingleStep(10);
+        doubleSpinBox_3->setValue(5);
 
         gridLayout->addWidget(doubleSpinBox_3, 3, 4, 1, 1);
 
@@ -215,9 +216,10 @@ public:
         sizePolicy1.setHeightForWidth(doubleSpinBox_2->sizePolicy().hasHeightForWidth());
         doubleSpinBox_2->setSizePolicy(sizePolicy1);
         doubleSpinBox_2->setDecimals(3);
-        doubleSpinBox_2->setMinimum(-100);
-        doubleSpinBox_2->setMaximum(100);
-        doubleSpinBox_2->setSingleStep(0.1);
+        doubleSpinBox_2->setMinimum(-10);
+        doubleSpinBox_2->setMaximum(10000);
+        doubleSpinBox_2->setSingleStep(10.1);
+        doubleSpinBox_2->setValue(1);
 
         gridLayout->addWidget(doubleSpinBox_2, 3, 1, 1, 1);
 
@@ -240,8 +242,9 @@ public:
         doubleSpinBox->setSizePolicy(sizePolicy1);
         doubleSpinBox->setDecimals(3);
         doubleSpinBox->setMinimum(-100);
-        doubleSpinBox->setMaximum(100);
-        doubleSpinBox->setSingleStep(0.1);
+        doubleSpinBox->setMaximum(10000);
+        doubleSpinBox->setSingleStep(10);
+        doubleSpinBox->setValue(10);
 
         gridLayout->addWidget(doubleSpinBox, 3, 0, 1, 1);
 
