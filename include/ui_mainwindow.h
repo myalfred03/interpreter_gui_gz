@@ -13,6 +13,7 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QCheckBox>
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QDoubleSpinBox>
 #include <QtWidgets/QFrame>
@@ -75,6 +76,8 @@ public:
     QDoubleSpinBox *doubleSpinBox_5;
     QLabel *label_6;
     QLabel *label_7;
+    QCheckBox *checkBox;
+    QLabel *label_8;
     Console *outputText;
     QMenuBar *menuBar;
     QMenu *menu;
@@ -357,6 +360,18 @@ public:
 
         gridLayout->addWidget(label_7, 3, 2, 1, 1);
 
+        checkBox = new QCheckBox(gridLayoutWidget);
+        checkBox->setObjectName(QStringLiteral("checkBox"));
+        checkBox->setMaximumSize(QSize(20, 16777215));
+        checkBox->setLayoutDirection(Qt::RightToLeft);
+
+        gridLayout->addWidget(checkBox, 1, 2, 1, 1);
+
+        label_8 = new QLabel(gridLayoutWidget);
+        label_8->setObjectName(QStringLiteral("label_8"));
+
+        gridLayout->addWidget(label_8, 1, 3, 1, 1);
+
         splitter->addWidget(gridLayoutWidget);
         doubleSpinBox_3->raise();
         doubleSpinBox_2->raise();
@@ -379,6 +394,8 @@ public:
         doubleSpinBox_5->raise();
         label_6->raise();
         label_7->raise();
+        checkBox->raise();
+        label_8->raise();
         splitter_2->addWidget(splitter);
         outputText = new Console(splitter_2);
         outputText->setObjectName(QStringLiteral("outputText"));
@@ -500,9 +517,9 @@ public:
 #ifndef QT_NO_TOOLTIP
         actionError_Datos->setToolTip(QApplication::translate("MainWindow", "<html><head/><body><p>Este icono se activara si se ingreso un par\303\241metro al robot fuera de su espacio de trabajo.</p><p>Favor Leer la Hoja de Datos del robot a controlar.</p></body></html>", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
-        label_3->setText(QApplication::translate("MainWindow", "<html><head/><body><p><span style=\" font-size:9pt; color:#ffffff;\">D</span></p></body></html>", Q_NULLPTR));
-        label_2->setText(QApplication::translate("MainWindow", "<html><head/><body><p><span style=\" font-size:10pt; color:#ffffff;\">I</span></p></body></html>", Q_NULLPTR));
-        label->setText(QApplication::translate("MainWindow", "<html><head/><body><p><span style=\" font-size:10pt; color:#ffffff;\">P</span></p></body></html>", Q_NULLPTR));
+        label_3->setText(QApplication::translate("MainWindow", "<html><head/><body><p><span style=\" font-size:14pt; font-weight:600; color:#ffffff;\">D</span></p></body></html>", Q_NULLPTR));
+        label_2->setText(QApplication::translate("MainWindow", "<html><head/><body><p><span style=\" font-size:14pt; font-weight:600; color:#ffffff;\">I</span></p></body></html>", Q_NULLPTR));
+        label->setText(QApplication::translate("MainWindow", "<html><head/><body><p><span style=\" font-size:14pt; font-weight:600; color:#ffffff;\">P</span></p></body></html>", Q_NULLPTR));
         pushButton->setText(QApplication::translate("MainWindow", "Send Value PID", Q_NULLPTR));
         pushButton_2->setText(QApplication::translate("MainWindow", "Clear Graph", Q_NULLPTR));
         label_4->setText(QApplication::translate("MainWindow", "X/Y", Q_NULLPTR));
@@ -526,9 +543,10 @@ public:
          << QApplication::translate("MainWindow", "joint_5", Q_NULLPTR)
          << QApplication::translate("MainWindow", "joint_6", Q_NULLPTR)
         );
-        label_5->setText(QApplication::translate("MainWindow", "<html><head/><body><p><span style=\" font-size:10pt; color:#ffffff;\">Joint To Set [Select]</span></p></body></html>", Q_NULLPTR));
-        label_6->setText(QApplication::translate("MainWindow", "<html><head/><body><p><span style=\" font-size:10pt; color:#ffffff;\">IMax</span></p></body></html>", Q_NULLPTR));
-        label_7->setText(QApplication::translate("MainWindow", "<html><head/><body><p><span style=\" font-size:10pt; color:#ffffff;\">IMin</span></p></body></html>", Q_NULLPTR));
+        label_5->setText(QApplication::translate("MainWindow", "<html><head/><body><p><span style=\" font-size:10pt; font-weight:600; color:#ffffff;\">Joint To Set [Select]</span></p></body></html>", Q_NULLPTR));
+        label_6->setText(QApplication::translate("MainWindow", "<html><head/><body><p><span style=\" font-size:14pt; font-weight:600; color:#ffffff;\">IMax</span></p></body></html>", Q_NULLPTR));
+        label_7->setText(QApplication::translate("MainWindow", "<html><head/><body><p><span style=\" font-size:14pt; font-weight:600; color:#ffffff;\">IMin</span></p></body></html>", Q_NULLPTR));
+        label_8->setText(QApplication::translate("MainWindow", "<html><head/><body><p><span style=\" font-weight:600; color:#ffffff;\">AntiWindup</span></p></body></html>", Q_NULLPTR));
         menu->setTitle(QApplication::translate("MainWindow", "Archivo", Q_NULLPTR));
         menuEdit_O->setTitle(QApplication::translate("MainWindow", "Editar", Q_NULLPTR));
         menuHelp_H->setTitle(QApplication::translate("MainWindow", "Help", Q_NULLPTR));

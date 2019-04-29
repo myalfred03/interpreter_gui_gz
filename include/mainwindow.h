@@ -16,6 +16,7 @@
 #include <ros/ros.h>
 #include <trajectory_msgs/JointTrajectory.h>
 #include <std_msgs/Float32MultiArray.h>
+#include <std_msgs/Float64.h>
 #include <control_msgs/JointControllerState.h>
 #include <boost/bind.hpp>
 #include <std_msgs/String.h>
@@ -39,6 +40,8 @@ public:
   ~MainWindow();
 
   ros::Publisher joint_pub,pid_value_pub;
+  ros::Publisher joint_pub1, joint_pub2, joint_pub3, joint_pub4, joint_pub5, joint_pub6;
+
   // ros::Subscriber joint_sub_limit;
   ros::Subscriber joint_sub_gazebo,joint_sub_gazebo2 ,joint_sub_gazebo3 ,joint_sub_gazebo4 ,joint_sub_gazebo5 ,joint_sub_gazebo6 ,joint_sub_gazebo7;
 
@@ -51,6 +54,7 @@ public:
   ros::Time startTime;
   double joint_1_plot, joint_2_plot, joint_3_plot, joint_4_plot, joint_5_plot, joint_6_plot;
   double vel_1_plot, vel_2_plot, vel_3_plot, vel_4_plot, vel_5_plot, vel_6_plot;
+  std_msgs::Float64 Joint0, Joint1, Joint2, Joint3, Joint4, Joint5;
 
   QTimer *timer;
 

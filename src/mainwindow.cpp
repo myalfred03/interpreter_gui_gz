@@ -82,6 +82,7 @@ MainWindow::MainWindow(QWidget *parent) :
   ui->graph_canvas->axisRect()->addAxis(QCPAxis::atRight);
   ui->graph_canvas->axisRect()->axis(QCPAxis::atRight, 0)->setPadding(30); // add some padding to have space for tags
   ui->graph_canvas->axisRect()->axis(QCPAxis::atRight, 1)->setPadding(30); // add some padding to have space for tags
+  ui->graph_canvas->axisRect()->insetLayout()->setInsetAlignment(0, (Qt::Alignment)1);
 
  
 
@@ -106,14 +107,38 @@ MainWindow::MainWindow(QWidget *parent) :
    joint_pub =       nh_.advertise<trajectory_msgs::JointTrajectory>("set_joint_trajectory", 10);
 // joint_sub_limit = nh_.subscribe("/joint_limits",10,&MainWindow::jointsizeCallback, this);
    pid_value_pub   = nh_.advertise<trajectory_msgs::JointTrajectory>("pid_value", 10);
-   joint_sub_gazebo= nh_.subscribe("/gazebo_client/joint_values_gazebo",1,&MainWindow::joint_Gz_Callback, this);
 
-   joint_sub_gazebo2= nh_.subscribe("/irb120/joint_1_position_controller/state" ,1,&MainWindow::joint_Gz_Callback2, this);
-   joint_sub_gazebo3= nh_.subscribe("/irb120/joint_2_position_controller/state" ,1,&MainWindow::joint_Gz_Callback3, this);
-   joint_sub_gazebo4= nh_.subscribe("/irb120/joint_3_position_controller/state" ,1,&MainWindow::joint_Gz_Callback4, this);
-   joint_sub_gazebo5= nh_.subscribe("/irb120/joint_4_position_controller/state" ,1,&MainWindow::joint_Gz_Callback5, this);
-   joint_sub_gazebo6= nh_.subscribe("/irb120/joint_5_position_controller/state" ,1,&MainWindow::joint_Gz_Callback6, this);
-   joint_sub_gazebo7= nh_.subscribe("/irb120/joint_6_position_controller/state" ,1,&MainWindow::joint_Gz_Callback7, this);
+   joint_pub1 =       nh_.advertise<std_msgs::Float64>("/robot/joint_1_position_controller/command", 100);
+   joint_pub2 =       nh_.advertise<std_msgs::Float64>("/robot/joint_2_position_controller/command", 100);
+   joint_pub3 =       nh_.advertise<std_msgs::Float64>("/robot/joint_3_position_controller/command", 100);
+   joint_pub4 =       nh_.advertise<std_msgs::Float64>("/robot/joint_4_position_controller/command", 100);
+   joint_pub5 =       nh_.advertise<std_msgs::Float64>("/robot/joint_5_position_controller/command", 100);
+   joint_pub6 =       nh_.advertise<std_msgs::Float64>("/robot/joint_6_position_controller/command", 100);
+
+   Joint0.data = 0.0;
+   Joint1.data = 0.0;
+   Joint2.data = 0.0;
+   Joint3.data = 0.0;
+   Joint4.data = 0.0;
+   Joint5.data = 0.0;
+
+   joint_pub1.publish(Joint0);
+   joint_pub2.publish(Joint1);
+   joint_pub3.publish(Joint2);
+   joint_pub4.publish(Joint3);
+   joint_pub5.publish(Joint4);
+   joint_pub6.publish(Joint5);
+
+
+   joint_sub_gazebo= nh_.subscribe("/gazebo_client/joint_values_gazebo",10,&MainWindow::joint_Gz_Callback, this);
+
+   joint_sub_gazebo2= nh_.subscribe("/robot/joint_1_position_controller/state" ,10,&MainWindow::joint_Gz_Callback2, this);
+   joint_sub_gazebo3= nh_.subscribe("/robot/joint_2_position_controller/state" ,10,&MainWindow::joint_Gz_Callback3, this);
+   joint_sub_gazebo4= nh_.subscribe("/robot/joint_3_position_controller/state" ,10,&MainWindow::joint_Gz_Callback4, this);
+   joint_sub_gazebo5= nh_.subscribe("/robot/joint_4_position_controller/state" ,10,&MainWindow::joint_Gz_Callback5, this);
+   joint_sub_gazebo6= nh_.subscribe("/robot/joint_5_position_controller/state" ,10,&MainWindow::joint_Gz_Callback6, this);
+   joint_sub_gazebo7= nh_.subscribe("/robot/joint_6_position_controller/state" ,10,&MainWindow::joint_Gz_Callback7, this);
+
 
    spinner = boost::shared_ptr<ros::AsyncSpinner>(new ros::AsyncSpinner(1));
    spinner->start();
@@ -234,7 +259,7 @@ void MainWindow::initializeGraph() {
    Penv1.setStyle(Qt::DotLine);
    Penv1.setWidthF(2);
    vGraph0->setPen(Penv1);
-   vGraph0->setName("v_Joint_1");
+   vGraph0->setName("C_Joint_1");
    vTag0 = new AxisTag(vGraph0->valueAxis());
    vTag0->setPen(vGraph0->pen());
 
@@ -243,7 +268,7 @@ void MainWindow::initializeGraph() {
    Penv2.setStyle(Qt::DotLine);
    Penv2.setWidthF(2);
    vGraph1->setPen(Penv2);
-   vGraph1->setName("v_Joint_2");
+   vGraph1->setName("C_Joint_2");
    vTag1 = new AxisTag(vGraph1->valueAxis());
    vTag1->setPen(vGraph1->pen());
 
@@ -252,7 +277,7 @@ void MainWindow::initializeGraph() {
    Penv3.setStyle(Qt::DotLine);
    Penv3.setWidthF(2);
    vGraph2->setPen(Penv3);
-   vGraph2->setName("v_Joint_3");
+   vGraph2->setName("C_Joint_3");
    vTag2 = new AxisTag(vGraph2->valueAxis());
    vTag2->setPen(vGraph2->pen());
 
@@ -261,7 +286,7 @@ void MainWindow::initializeGraph() {
    Penv4.setStyle(Qt::DotLine);
    Penv4.setWidthF(2);
    vGraph3->setPen(Penv4);
-   vGraph3->setName("v_Joint_4");
+   vGraph3->setName("C_Joint_4");
    vTag3 = new AxisTag(vGraph3->valueAxis());
    vTag3->setPen(vGraph3->pen());
 
@@ -270,7 +295,7 @@ void MainWindow::initializeGraph() {
    Penv5.setStyle(Qt::DotLine);
    Penv5.setWidthF(2);
    vGraph4->setPen(Penv5);
-   vGraph4->setName("v_Joint_5");
+   vGraph4->setName("C_Joint_5");
    vTag4 = new AxisTag(vGraph4->valueAxis());
    vTag4->setPen(vGraph4->pen());
 
@@ -279,7 +304,7 @@ void MainWindow::initializeGraph() {
    Penv6.setStyle(Qt::DotLine);
    Penv6.setWidthF(2);
    vGraph5->setPen(Penv6);
-   vGraph5->setName("v_Joint_6");
+   vGraph5->setName("C_Joint_6");
    vTag5 = new AxisTag(vGraph5->valueAxis());
    vTag5->setPen(vGraph5->pen());
 
@@ -409,6 +434,7 @@ void MainWindow::moveLegend()
     if (ok)
     {
       ui->graph_canvas->axisRect()->insetLayout()->setInsetAlignment(0, (Qt::Alignment)dataInt);
+
       ui->graph_canvas->replot();
     }
   }
@@ -504,19 +530,19 @@ void MainWindow::updateGraph() {
   vTag4->updatePosition(vgraph5Value);
   vTag5->updatePosition(vgraph6Value);
 
-  jTag0->setText(QString::number(jgraph1Value, 'f', 2));
-  jTag1->setText(QString::number(jgraph2Value, 'f', 2));
-  jTag2->setText(QString::number(jgraph3Value, 'f', 2));
-  jTag3->setText(QString::number(jgraph4Value, 'f', 2));
-  jTag4->setText(QString::number(jgraph5Value, 'f', 2));
-  jTag5->setText(QString::number(jgraph6Value, 'f', 2));
+  jTag0->setText(QString::number(jgraph1Value, 'f', 4));
+  jTag1->setText(QString::number(jgraph2Value, 'f', 4));
+  jTag2->setText(QString::number(jgraph3Value, 'f', 4));
+  jTag3->setText(QString::number(jgraph4Value, 'f', 4));
+  jTag4->setText(QString::number(jgraph5Value, 'f', 4));
+  jTag5->setText(QString::number(jgraph6Value, 'f', 4));
 
-  vTag0->setText(QString::number(vgraph1Value, 'f', 2));
-  vTag1->setText(QString::number(vgraph2Value, 'f', 2));
-  vTag2->setText(QString::number(vgraph3Value, 'f', 2));
-  vTag3->setText(QString::number(vgraph4Value, 'f', 2));
-  vTag4->setText(QString::number(vgraph5Value, 'f', 2));
-  vTag5->setText(QString::number(vgraph6Value, 'f', 2));
+  vTag0->setText(QString::number(vgraph1Value, 'f', 4));
+  vTag1->setText(QString::number(vgraph2Value, 'f', 4));
+  vTag2->setText(QString::number(vgraph3Value, 'f', 4));
+  vTag3->setText(QString::number(vgraph4Value, 'f', 4));
+  vTag4->setText(QString::number(vgraph5Value, 'f', 4));
+  vTag5->setText(QString::number(vgraph6Value, 'f', 4));
   
  // mPlot->replot();
    ui->graph_canvas->rescaleAxes();
@@ -842,25 +868,36 @@ void MainWindow::pid_value_2()
   dynamic_reconfigure::DoubleParameter double_param_p;
   dynamic_reconfigure::DoubleParameter double_param_i;
   dynamic_reconfigure::DoubleParameter double_param_d;  
+  dynamic_reconfigure::DoubleParameter double_param_imax;  
+  dynamic_reconfigure::DoubleParameter double_param_imin;  
+
   dynamic_reconfigure::Config conf;
 
 
-
+  
   enable_param.name = "antiwindup";
-  enable_param.value = enableAW;
+  enable_param.value = ui->checkBox->checkState(); // enableAW;
   conf.bools.push_back(enable_param);
 
   double_param_p.name = "p";
-  double_param_p.value = ui->doubleSpinBox->   value();;
+  double_param_p.value = ui->doubleSpinBox->   value();
   conf.doubles.push_back(double_param_p);
 
   double_param_i.name = "i";
-  double_param_i.value = ui->doubleSpinBox_2->   value();;
+  double_param_i.value = ui->doubleSpinBox_2->   value();
   conf.doubles.push_back(double_param_i);
 
   double_param_d.name = "d";
-  double_param_d.value = ui->doubleSpinBox_3->   value();;
+  double_param_d.value = ui->doubleSpinBox_3->   value();
   conf.doubles.push_back(double_param_d);
+
+  double_param_imax.name = "i_clamp_max";
+  double_param_imax.value = ui->doubleSpinBox_4->   value();
+  conf.doubles.push_back(double_param_imax);
+
+  double_param_imin.name = "i_clamp_min";
+  double_param_imin.value = ui->doubleSpinBox_5->   value();
+  conf.doubles.push_back(double_param_imin);
 
   srv_req.config = conf;
   indexPID = ui->comboBox_2->currentIndex();
@@ -868,7 +905,7 @@ void MainWindow::pid_value_2()
   switch (indexPID){
    case 0:
   {
-      if (ros::service::call("/irb120/joint_1_position_controller/pid/set_parameters", srv_req, srv_resp)) {
+      if (ros::service::call("/robot/joint_1_position_controller/pid/set_parameters", srv_req, srv_resp)) {
         ROS_INFO("call to set joint_1_position_controller parameters succeeded");
       } else {
         ROS_INFO("call to set joint_1_position_controller parameters failed");
@@ -879,7 +916,7 @@ void MainWindow::pid_value_2()
 
    case 1:
  {
-      if (ros::service::call("/irb120/joint_2_position_controller/pid/set_parameters", srv_req, srv_resp)) {
+      if (ros::service::call("/robot/joint_2_position_controller/pid/set_parameters", srv_req, srv_resp)) {
         ROS_INFO("call to set joint_2_position_controller parameters succeeded");
       } else {
         ROS_INFO("call to set joint_2_position_controller parameters failed");
@@ -889,7 +926,7 @@ void MainWindow::pid_value_2()
  }
    case 2:
   {
-      if (ros::service::call("/irb120/joint_3_position_controller/pid/set_parameters", srv_req, srv_resp)) {
+      if (ros::service::call("/robot/joint_3_position_controller/pid/set_parameters", srv_req, srv_resp)) {
         ROS_INFO("call to set joint_3_position_controller parameters succeeded");
       } else {
         ROS_INFO("call to set joint_3_position_controller parameters failed");
@@ -899,7 +936,7 @@ void MainWindow::pid_value_2()
   }
    case 3:
  {
-      if (ros::service::call("/irb120/joint_4_position_controller/pid/set_parameters", srv_req, srv_resp)) {
+      if (ros::service::call("/robot/joint_4_position_controller/pid/set_parameters", srv_req, srv_resp)) {
         ROS_INFO("call to set joint_4_position_controller parameters succeeded");
       } else {
         ROS_INFO("call to set joint_4_position_controller parameters failed");
@@ -909,7 +946,7 @@ void MainWindow::pid_value_2()
  }
    case 4:
  {
-      if (ros::service::call("/irb120/joint_5_position_controller/pid/set_parameters", srv_req, srv_resp)) {
+      if (ros::service::call("/robot/joint_5_position_controller/pid/set_parameters", srv_req, srv_resp)) {
         ROS_INFO("call to set joint_5_position_controller parameters succeeded");
       } else {
         ROS_INFO("call to set joint_5_position_controller parameters failed");
@@ -917,6 +954,18 @@ void MainWindow::pid_value_2()
   
    break;
    }
+
+   case 5:
+ {
+      if (ros::service::call("/robot/joint_6_position_controller/pid/set_parameters", srv_req, srv_resp)) {
+        ROS_INFO("call to set joint_6_position_controller parameters succeeded");
+      } else {
+        ROS_INFO("call to set joint_6_position_controller parameters failed");
+      }
+  
+   break;
+   }   
+  
   }
 }
 
@@ -1168,22 +1217,22 @@ void MainWindow::joint_Gz_Callback7(const control_msgs::JointControllerState &ms
 void MainWindow::joint_Gz_Callback(const trajectory_msgs::JointTrajectory &msg) //Valores de los limtes de los joints
 {
   std::cout<<"gazebo joints"<< std::endl;
-//ms1.process_value_dot
-   joint_1_plot = msg.points[0].positions[0]*ToG;
-   joint_2_plot = msg.points[0].positions[1]*ToG;
-   joint_3_plot = msg.points[0].positions[2]*ToG;
-   joint_4_plot = msg.points[0].positions[3]*ToG;
-   joint_5_plot = msg.points[0].positions[4]*ToG;
-   joint_6_plot = msg.points[0].positions[5]*ToG;
+// //ms1.process_value_dot
+//    joint_1_plot = msg.points[0].positions[0]*ToG;
+//    joint_2_plot = msg.points[0].positions[1]*ToG;
+//    joint_3_plot = msg.points[0].positions[2]*ToG;
+//    joint_4_plot = msg.points[0].positions[3]*ToG;
+//    joint_5_plot = msg.points[0].positions[4]*ToG;
+//    joint_6_plot = msg.points[0].positions[5]*ToG;
 
-   vel_1_plot = msg.points[1].positions[0];
-   vel_2_plot = msg.points[1].positions[1];
-   vel_3_plot = msg.points[1].positions[2];
-   vel_4_plot = msg.points[1].positions[3];
-   vel_5_plot = msg.points[1].positions[4];
-   vel_6_plot = msg.points[1].positions[5];
+//    vel_1_plot = msg.points[1].positions[0];
+//    vel_2_plot = msg.points[1].positions[1];
+//    vel_3_plot = msg.points[1].positions[2];
+//    vel_4_plot = msg.points[1].positions[3];
+//    vel_5_plot = msg.points[1].positions[4];
+//    vel_6_plot = msg.points[1].positions[5];
 
-  std::cout<<joint_1_plot<<"\n"<<joint_2_plot<<std::endl;
+//   std::cout<<joint_1_plot<<"\n"<<joint_2_plot<<std::endl;
 
      // joint_positions_["joint_1"]= msg.points[0].positions[0]/ToG;
      // joint_positions_["joint_2"]= msg.points[0].positions[1]/ToG;
@@ -1222,6 +1271,8 @@ trajectory_msgs::JointTrajectory MainWindow::comandos(std::string &comando, int 
   comandoP.velocities.resize(6);
 
 
+
+
  //Full Zero (Core Dumped)
 //      for (int j = 0; j < 6; j++) {
 //      msg1.points[0].positions[j] = 0.00;
@@ -1251,6 +1302,8 @@ trajectory_msgs::JointTrajectory MainWindow::comandos(std::string &comando, int 
               this->updateOutput(info);
 
               comandoP.positions[0] = std::stod(partes[2]);
+              Joint0.data = std::stod(partes[2])/ToG;
+              joint_pub1.publish(Joint0);
 
               if(comandoP.positions[0]>limit.data[0] && comandoP.positions[0]<limit.data[6] ){
                 std::cout<< "is ok for now"<< std::endl;
@@ -1278,6 +1331,8 @@ trajectory_msgs::JointTrajectory MainWindow::comandos(std::string &comando, int 
               this->updateOutput(info);
 
               comandoP.positions[1] = std::stod(partes[2]);
+              Joint1.data = std::stod(partes[2])/ToG;
+              joint_pub2.publish(Joint1);
 //              comandoP.velocities[0] = std::stod(partes[4]);
 //              comandoP.velocities[1] = std::stod(partes[4]);
 //              comandoP.velocities[2] = std::stod(partes[4]);
@@ -1316,7 +1371,8 @@ trajectory_msgs::JointTrajectory MainWindow::comandos(std::string &comando, int 
             this->updateOutput(info);
 
             comandoP.positions[2] = std::stod(partes[2]);
-
+              Joint2.data = std::stod(partes[2])/ToG;
+              joint_pub3.publish(Joint2);
             if(comandoP.positions[2]>limit.data[2] && comandoP.positions[2]<limit.data[8] ){
               std::cout<< "is ok for now"<< std::endl;
               comandoP.positions[0] = msg1.points[i-1].positions[0];
@@ -1345,7 +1401,8 @@ trajectory_msgs::JointTrajectory MainWindow::comandos(std::string &comando, int 
             this->updateOutput(info);
 
             comandoP.positions[3] = std::stod(partes[2]);
-
+              Joint3.data = std::stod(partes[2])/ToG;
+              joint_pub4.publish(Joint3);
             if(comandoP.positions[3]>limit.data[3] && comandoP.positions[3]<limit.data[9] ){
               std::cout<< "is ok for now"<< std::endl;
               comandoP.positions[0] = msg1.points[i-1].positions[0];
@@ -1374,7 +1431,8 @@ trajectory_msgs::JointTrajectory MainWindow::comandos(std::string &comando, int 
             this->updateOutput(info);
 
             comandoP.positions[4] = std::stod(partes[2]);
-
+              Joint4.data = std::stod(partes[2])/ToG;
+              joint_pub5.publish(Joint4);
             if(comandoP.positions[4]>limit.data[4] && comandoP.positions[4]<limit.data[10] ){
               std::cout<< "is ok for now"<< std::endl;
               comandoP.positions[0] = msg1.points[i-1].positions[0];
@@ -1403,7 +1461,8 @@ trajectory_msgs::JointTrajectory MainWindow::comandos(std::string &comando, int 
             this->updateOutput(info);
 
             comandoP.positions[5] = std::stod(partes[2]);
-
+              Joint5.data = std::stod(partes[2])/ToG;
+              joint_pub6.publish(Joint5);
             if(comandoP.positions[5]>limit.data[5] && comandoP.positions[5]<limit.data[11] ){
               std::cout<< "is ok for now"<< std::endl;
               comandoP.positions[0] = msg1.points[i-1].positions[0];
