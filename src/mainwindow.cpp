@@ -104,30 +104,30 @@ MainWindow::MainWindow(QWidget *parent) :
   msgolder.points.resize(1);
   msgolder.points[0].positions.resize(6);
 
-   joint_pub =       nh_.advertise<trajectory_msgs::JointTrajectory>("set_joint_trajectory", 10);
+   joint_pub =       nh_.advertise<trajectory_msgs::JointTrajectory>("set_joint_trajectory_gz", 10);
 // joint_sub_limit = nh_.subscribe("/joint_limits",10,&MainWindow::jointsizeCallback, this);
    pid_value_pub   = nh_.advertise<trajectory_msgs::JointTrajectory>("pid_value", 10);
 
-   joint_pub1 =       nh_.advertise<std_msgs::Float64>("/robot/joint_1_position_controller/command", 100);
-   joint_pub2 =       nh_.advertise<std_msgs::Float64>("/robot/joint_2_position_controller/command", 100);
-   joint_pub3 =       nh_.advertise<std_msgs::Float64>("/robot/joint_3_position_controller/command", 100);
-   joint_pub4 =       nh_.advertise<std_msgs::Float64>("/robot/joint_4_position_controller/command", 100);
-   joint_pub5 =       nh_.advertise<std_msgs::Float64>("/robot/joint_5_position_controller/command", 100);
-   joint_pub6 =       nh_.advertise<std_msgs::Float64>("/robot/joint_6_position_controller/command", 100);
+   // joint_pub1 =       nh_.advertise<std_msgs::Float64>("/robot/joint_1_position_controller/command", 100);
+   // joint_pub2 =       nh_.advertise<std_msgs::Float64>("/robot/joint_2_position_controller/command", 100);
+   // joint_pub3 =       nh_.advertise<std_msgs::Float64>("/robot/joint_3_position_controller/command", 100);
+   // joint_pub4 =       nh_.advertise<std_msgs::Float64>("/robot/joint_4_position_controller/command", 100);
+   // joint_pub5 =       nh_.advertise<std_msgs::Float64>("/robot/joint_5_position_controller/command", 100);
+   // joint_pub6 =       nh_.advertise<std_msgs::Float64>("/robot/joint_6_position_controller/command", 100);
 
-   Joint0.data = 0.0;
-   Joint1.data = 0.0;
-   Joint2.data = 0.0;
-   Joint3.data = 0.0;
-   Joint4.data = 0.0;
-   Joint5.data = 0.0;
+   // Joint0.data = 0.0;
+   // Joint1.data = 0.0;
+   // Joint2.data = 0.0;
+   // Joint3.data = 0.0;
+   // Joint4.data = 0.0;
+   // Joint5.data = 0.0;
 
-   joint_pub1.publish(Joint0);
-   joint_pub2.publish(Joint1);
-   joint_pub3.publish(Joint2);
-   joint_pub4.publish(Joint3);
-   joint_pub5.publish(Joint4);
-   joint_pub6.publish(Joint5);
+   // joint_pub1.publish(Joint0);
+   // joint_pub2.publish(Joint1);
+   // joint_pub3.publish(Joint2);
+   // joint_pub4.publish(Joint3);
+   // joint_pub5.publish(Joint4);
+   // joint_pub6.publish(Joint5);
 
 
    joint_sub_gazebo= nh_.subscribe("/gazebo_client/joint_values_gazebo",10,&MainWindow::joint_Gz_Callback, this);
@@ -1277,7 +1277,7 @@ trajectory_msgs::JointTrajectory MainWindow::comandos(std::string &comando, int 
 //      for (int j = 0; j < 6; j++) {
 //      msg1.points[0].positions[j] = 0.00;
 //      } //for
-
+//Heuristics end file
 
   std::cout << "\n I have iterator " << i <<std::endl;
 
@@ -1302,8 +1302,8 @@ trajectory_msgs::JointTrajectory MainWindow::comandos(std::string &comando, int 
               this->updateOutput(info);
 
               comandoP.positions[0] = std::stod(partes[2]);
-              Joint0.data = std::stod(partes[2])/ToG;
-              joint_pub1.publish(Joint0);
+              // Joint0.data = std::stod(partes[2])/ToG;
+              // joint_pub1.publish(Joint0);
 
               if(comandoP.positions[0]>limit.data[0] && comandoP.positions[0]<limit.data[6] ){
                 std::cout<< "is ok for now"<< std::endl;
@@ -1331,8 +1331,8 @@ trajectory_msgs::JointTrajectory MainWindow::comandos(std::string &comando, int 
               this->updateOutput(info);
 
               comandoP.positions[1] = std::stod(partes[2]);
-              Joint1.data = std::stod(partes[2])/ToG;
-              joint_pub2.publish(Joint1);
+              // Joint1.data = std::stod(partes[2])/ToG;
+              // joint_pub2.publish(Joint1);
 //              comandoP.velocities[0] = std::stod(partes[4]);
 //              comandoP.velocities[1] = std::stod(partes[4]);
 //              comandoP.velocities[2] = std::stod(partes[4]);
@@ -1371,8 +1371,8 @@ trajectory_msgs::JointTrajectory MainWindow::comandos(std::string &comando, int 
             this->updateOutput(info);
 
             comandoP.positions[2] = std::stod(partes[2]);
-              Joint2.data = std::stod(partes[2])/ToG;
-              joint_pub3.publish(Joint2);
+              // Joint2.data = std::stod(partes[2])/ToG;
+              // joint_pub3.publish(Joint2);
             if(comandoP.positions[2]>limit.data[2] && comandoP.positions[2]<limit.data[8] ){
               std::cout<< "is ok for now"<< std::endl;
               comandoP.positions[0] = msg1.points[i-1].positions[0];
@@ -1401,8 +1401,8 @@ trajectory_msgs::JointTrajectory MainWindow::comandos(std::string &comando, int 
             this->updateOutput(info);
 
             comandoP.positions[3] = std::stod(partes[2]);
-              Joint3.data = std::stod(partes[2])/ToG;
-              joint_pub4.publish(Joint3);
+              // Joint3.data = std::stod(partes[2])/ToG;
+              // joint_pub4.publish(Joint3);
             if(comandoP.positions[3]>limit.data[3] && comandoP.positions[3]<limit.data[9] ){
               std::cout<< "is ok for now"<< std::endl;
               comandoP.positions[0] = msg1.points[i-1].positions[0];
@@ -1431,8 +1431,8 @@ trajectory_msgs::JointTrajectory MainWindow::comandos(std::string &comando, int 
             this->updateOutput(info);
 
             comandoP.positions[4] = std::stod(partes[2]);
-              Joint4.data = std::stod(partes[2])/ToG;
-              joint_pub5.publish(Joint4);
+              // Joint4.data = std::stod(partes[2])/ToG;
+              // joint_pub5.publish(Joint4);
             if(comandoP.positions[4]>limit.data[4] && comandoP.positions[4]<limit.data[10] ){
               std::cout<< "is ok for now"<< std::endl;
               comandoP.positions[0] = msg1.points[i-1].positions[0];
@@ -1461,8 +1461,8 @@ trajectory_msgs::JointTrajectory MainWindow::comandos(std::string &comando, int 
             this->updateOutput(info);
 
             comandoP.positions[5] = std::stod(partes[2]);
-              Joint5.data = std::stod(partes[2])/ToG;
-              joint_pub6.publish(Joint5);
+              // Joint5.data = std::stod(partes[2])/ToG;
+              // joint_pub6.publish(Joint5);
             if(comandoP.positions[5]>limit.data[5] && comandoP.positions[5]<limit.data[11] ){
               std::cout<< "is ok for now"<< std::endl;
               comandoP.positions[0] = msg1.points[i-1].positions[0];
@@ -1663,3 +1663,7 @@ void MainWindow::about(){
 //    }
 //    }
 //msg1.points[i-1].positions[2] = std::stod(partes[1]);
+
+
+//MainWindow::comandos Gazebo es capaz de mover el joint de una forma progresiva por lo tanto no requiero 
+// Guardar el valor anterior de la posicion del joint mas que solo aplicar el avance en cada msg.point.x
