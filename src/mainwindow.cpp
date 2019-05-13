@@ -1057,12 +1057,12 @@ void MainWindow::run(){
         msg1.points.resize(1);
         msg1.points[0].positions.resize(6);
         msg1.points[0].velocities.resize(6);
-        msg1.points[0].velocities[0] = 70;
-        msg1.points[0].velocities[1] = 70;
-        msg1.points[0].velocities[2] = 70;
-        msg1.points[0].velocities[3] = 70;
-        msg1.points[0].velocities[4] = 70;
-        msg1.points[0].velocities[5] = 70;
+        msg1.points[0].velocities[0] = 0;
+        msg1.points[0].velocities[1] = 0;
+        msg1.points[0].velocities[2] = 0;
+        msg1.points[0].velocities[3] = 0;
+        msg1.points[0].velocities[4] = 0;
+        msg1.points[0].velocities[5] = 0;
 
 //       } //for
 //       joint_pub.publish(msg1) ; //publish nodo
@@ -1287,12 +1287,12 @@ trajectory_msgs::JointTrajectory MainWindow::comandos(std::string &comando, int 
     std::cout<< "Line empty"<< std::endl;
 //    msg1.points[0].positions[0] = 0.00;
       }else if (partes[1] == std::string("G") && partes[3] == std::string("V")){
-        comandoP.velocities[0] = 101 - std::stod(partes[4]);
-        comandoP.velocities[1] = 101 - std::stod(partes[4]);
-        comandoP.velocities[2] = 101 - std::stod(partes[4]);
-        comandoP.velocities[3] = 101 - std::stod(partes[4]);
-        comandoP.velocities[4] = 101 - std::stod(partes[4]);
-        comandoP.velocities[5] = 101 - std::stod(partes[4]);
+        comandoP.velocities[0] = std::stod(partes[4]);
+        comandoP.velocities[1] = std::stod(partes[4]);
+        comandoP.velocities[2] = std::stod(partes[4]);
+        comandoP.velocities[3] = std::stod(partes[4]);
+        comandoP.velocities[4] = std::stod(partes[4]);
+        comandoP.velocities[5] = std::stod(partes[4]);
         switch(partes[0][6]){
           case '1':
             if(partes.size()>1){
@@ -1519,7 +1519,7 @@ trajectory_msgs::JointTrajectory MainWindow::comandos(std::string &comando, int 
 //          isloop =true;
           info =std::string(">>  Instrucción wait() a  " + partes[1] + " ms");
           this->updateOutput(info);
-          comandoP.velocities[0] = std::stod(partes[1])/20;
+          comandoP.velocities[0] = std::stod(partes[1]);
 //          comandoP.velocities[1] = std::stod(partes[1]);
 //          comandoP.velocities[2] = std::stod(partes[1]);
 //          comandoP.velocities[3] = std::stod(partes[1]);
