@@ -130,7 +130,7 @@ MainWindow::MainWindow(QWidget *parent) :
    // joint_pub6.publish(Joint5);
 
 
-   joint_sub_gazebo= nh_.subscribe("/gazebo_client/joint_values_gazebo",10,&MainWindow::joint_Gz_Callback, this);
+  // joint_sub_gazebo= nh_.subscribe("/gazebo_client/joint_values_gazebo",10,&MainWindow::joint_Gz_Callback, this);
 
    joint_sub_gazebo2= nh_.subscribe("/robot/joint_1_position_controller/state" ,10,&MainWindow::joint_Gz_Callback2, this);
    joint_sub_gazebo3= nh_.subscribe("/robot/joint_2_position_controller/state" ,10,&MainWindow::joint_Gz_Callback3, this);
@@ -1286,7 +1286,7 @@ trajectory_msgs::JointTrajectory MainWindow::comandos(std::string &comando, int 
   if(partes.size()==0){
     std::cout<< "Line empty"<< std::endl;
 //    msg1.points[0].positions[0] = 0.00;
-      }else if (partes[1] == std::string("G") && partes[3] == std::string("V")){
+      }else if (partes[1] == std::string("G") && partes[3] == std::string("W")){
         comandoP.velocities[0] = std::stod(partes[4]);
         comandoP.velocities[1] = std::stod(partes[4]);
         comandoP.velocities[2] = std::stod(partes[4]);
@@ -1491,7 +1491,7 @@ trajectory_msgs::JointTrajectory MainWindow::comandos(std::string &comando, int 
             }
             break;
 
-          case 'w':
+          case 'x':
             //w [union]
             //Espera hasta que la unión halla llegado a su destino. Si no se indica la unión se espera hata terminar todas
             ROS_INFO("eseparndo");

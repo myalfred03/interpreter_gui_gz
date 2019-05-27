@@ -234,7 +234,7 @@ void CodeEditor::keyPressEvent(QKeyEvent *event){
     }
 }
 void CodeEditor::setUpCompleteList(){
-  completeList<< "G" << "V" << "MoveJ_1"
+  completeList<< "G" << "W" << "MoveJ_1"
               << "MoveJ_2" << "MoveJ_3" << "MoveJ_4"
                << "MoveJ_5" << "MoveJ_6" << "loop()"
               << "wait()"

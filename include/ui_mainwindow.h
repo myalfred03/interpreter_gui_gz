@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created by: Qt User Interface Compiler version 5.9.1
+** Created by: Qt User Interface Compiler version 5.7.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -68,7 +68,6 @@ public:
     QCustomPlot *graph_canvas;
     QFrame *line_2;
     QFrame *line_3;
-    QComboBox *comboBox;
     QComboBox *comboBox_2;
     QFrame *line_4;
     QLabel *label_5;
@@ -78,6 +77,7 @@ public:
     QLabel *label_7;
     QCheckBox *checkBox;
     QLabel *label_8;
+    QComboBox *comboBox;
     Console *outputText;
     QMenuBar *menuBar;
     QMenu *menu;
@@ -313,11 +313,6 @@ public:
 
         gridLayout->addWidget(line_3, 9, 0, 1, 5);
 
-        comboBox = new QComboBox(gridLayoutWidget);
-        comboBox->setObjectName(QStringLiteral("comboBox"));
-
-        gridLayout->addWidget(comboBox, 6, 1, 1, 1);
-
         comboBox_2 = new QComboBox(gridLayoutWidget);
         comboBox_2->setObjectName(QStringLiteral("comboBox_2"));
 
@@ -371,6 +366,11 @@ public:
         label_8->setObjectName(QStringLiteral("label_8"));
 
         gridLayout->addWidget(label_8, 1, 3, 1, 1);
+
+        comboBox = new QComboBox(gridLayoutWidget);
+        comboBox->setObjectName(QStringLiteral("comboBox"));
+
+        gridLayout->addWidget(comboBox, 6, 1, 1, 2);
 
         splitter->addWidget(gridLayoutWidget);
         doubleSpinBox_3->raise();
@@ -462,31 +462,21 @@ public:
 #ifndef QT_NO_TOOLTIP
         actionNewFile->setToolTip(QApplication::translate("MainWindow", "Crear nuevo archivo Script LVR", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
-#ifndef QT_NO_SHORTCUT
         actionNewFile->setShortcut(QApplication::translate("MainWindow", "Ctrl+N", Q_NULLPTR));
-#endif // QT_NO_SHORTCUT
         actionOpen->setText(QApplication::translate("MainWindow", "Abrir", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         actionOpen->setToolTip(QApplication::translate("MainWindow", "Abrir Archivo Script LVR", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
-#ifndef QT_NO_SHORTCUT
         actionOpen->setShortcut(QApplication::translate("MainWindow", "Ctrl+O", Q_NULLPTR));
-#endif // QT_NO_SHORTCUT
         actionInfoR->setText(QApplication::translate("MainWindow", "Info", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         actionInfoR->setToolTip(QApplication::translate("MainWindow", "Informaci\303\263n del Robot Cargado a ROS", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
-#ifndef QT_NO_SHORTCUT
         actionInfoR->setShortcut(QApplication::translate("MainWindow", "Ctrl+A", Q_NULLPTR));
-#endif // QT_NO_SHORTCUT
         actionUndo->setText(QApplication::translate("MainWindow", "Atras", Q_NULLPTR));
-#ifndef QT_NO_SHORTCUT
         actionUndo->setShortcut(QApplication::translate("MainWindow", "Ctrl+Z", Q_NULLPTR));
-#endif // QT_NO_SHORTCUT
         actionRedo->setText(QApplication::translate("MainWindow", "Adelante", Q_NULLPTR));
-#ifndef QT_NO_SHORTCUT
         actionRedo->setShortcut(QApplication::translate("MainWindow", "Ctrl+Shift+Z", Q_NULLPTR));
-#endif // QT_NO_SHORTCUT
         actionAbout->setText(QApplication::translate("MainWindow", "About Editor", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         actionAbout->setToolTip(QApplication::translate("MainWindow", "\345\205\263\344\272\216 HJ Editor", Q_NULLPTR));
@@ -499,16 +489,12 @@ public:
 #ifndef QT_NO_TOOLTIP
         actionSave_File->setToolTip(QApplication::translate("MainWindow", "Guardar Archivo ", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
-#ifndef QT_NO_SHORTCUT
         actionSave_File->setShortcut(QApplication::translate("MainWindow", "Ctrl+S", Q_NULLPTR));
-#endif // QT_NO_SHORTCUT
         actionRun->setText(QApplication::translate("MainWindow", "Ejecutar", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         actionRun->setToolTip(QApplication::translate("MainWindow", "Ejecutar Simulaci\303\263n", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
-#ifndef QT_NO_SHORTCUT
         actionRun->setShortcut(QApplication::translate("MainWindow", "Ctrl+R", Q_NULLPTR));
-#endif // QT_NO_SHORTCUT
         actionSetting->setText(QApplication::translate("MainWindow", "Setting", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         actionSetting->setToolTip(QApplication::translate("MainWindow", "\346\233\264\346\224\271\347\274\226\350\276\221\345\231\250\347\232\204\350\256\276\347\275\256", Q_NULLPTR));
@@ -523,17 +509,6 @@ public:
         pushButton->setText(QApplication::translate("MainWindow", "Send Value PID", Q_NULLPTR));
         pushButton_2->setText(QApplication::translate("MainWindow", "Clear Graph", Q_NULLPTR));
         label_4->setText(QApplication::translate("MainWindow", "X/Y", Q_NULLPTR));
-        comboBox->clear();
-        comboBox->insertItems(0, QStringList()
-         << QApplication::translate("MainWindow", "Show All Joints", Q_NULLPTR)
-         << QApplication::translate("MainWindow", "Show Joint 1", Q_NULLPTR)
-         << QApplication::translate("MainWindow", "Show Joint 2", Q_NULLPTR)
-         << QApplication::translate("MainWindow", "Show Joint 3", Q_NULLPTR)
-         << QApplication::translate("MainWindow", "Show Joint 4", Q_NULLPTR)
-         << QApplication::translate("MainWindow", "Show Joint 5", Q_NULLPTR)
-         << QApplication::translate("MainWindow", "Show Joint 6", Q_NULLPTR)
-         << QApplication::translate("MainWindow", "Show Only Joint", Q_NULLPTR)
-        );
         comboBox_2->clear();
         comboBox_2->insertItems(0, QStringList()
          << QApplication::translate("MainWindow", "joint_1", Q_NULLPTR)
@@ -547,6 +522,17 @@ public:
         label_6->setText(QApplication::translate("MainWindow", "<html><head/><body><p><span style=\" font-size:14pt; font-weight:600; color:#ffffff;\">IMax</span></p></body></html>", Q_NULLPTR));
         label_7->setText(QApplication::translate("MainWindow", "<html><head/><body><p><span style=\" font-size:14pt; font-weight:600; color:#ffffff;\">IMin</span></p></body></html>", Q_NULLPTR));
         label_8->setText(QApplication::translate("MainWindow", "<html><head/><body><p><span style=\" font-weight:600; color:#ffffff;\">AntiWindup</span></p></body></html>", Q_NULLPTR));
+        comboBox->clear();
+        comboBox->insertItems(0, QStringList()
+         << QApplication::translate("MainWindow", "Show All Joints", Q_NULLPTR)
+         << QApplication::translate("MainWindow", "Show Joint 1", Q_NULLPTR)
+         << QApplication::translate("MainWindow", "Show Joint 2", Q_NULLPTR)
+         << QApplication::translate("MainWindow", "Show Joint 3", Q_NULLPTR)
+         << QApplication::translate("MainWindow", "Show Joint 4", Q_NULLPTR)
+         << QApplication::translate("MainWindow", "Show Joint 5", Q_NULLPTR)
+         << QApplication::translate("MainWindow", "Show Joint 6", Q_NULLPTR)
+         << QApplication::translate("MainWindow", "Show Only Joint", Q_NULLPTR)
+        );
         menu->setTitle(QApplication::translate("MainWindow", "Archivo", Q_NULLPTR));
         menuEdit_O->setTitle(QApplication::translate("MainWindow", "Editar", Q_NULLPTR));
         menuHelp_H->setTitle(QApplication::translate("MainWindow", "Help", Q_NULLPTR));
